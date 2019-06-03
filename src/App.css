@@ -2,7 +2,12 @@
 @import url("./assets/fonts/TenbyFive/TenbyFive.css");
 @import url("./assets/fonts/TenbyFourLight/TenbyFourLight.css");
 html {
-  font-size: calc(.875rem + 1vw);
+  font-size: calc(.875em + 1vw);
+}
+@media screen and (min-width:425px) {
+  html {
+    font-size: calc(1em + 1vw);
+  }
 }
 body {
   font-family: TenbyFourLight, sans-serif;
