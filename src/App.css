@@ -1,3 +1,12 @@
+
+@import url("./assets/fonts/TenbyFive/TenbyFive.css");
+@import url("./assets/fonts/TenbyFourLight/TenbyFourLight.css");
 html {
   font-size: calc(.875rem + 1vw);
+}
+body {
+  font-family: TenbyFourLight, sans-serif;
+}
+h1,h2,h3,h4,h5,h6 {
+  font-family: TenbyFive, sans-serif;
 }
