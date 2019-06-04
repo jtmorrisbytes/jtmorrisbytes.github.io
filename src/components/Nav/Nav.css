@@ -7,15 +7,27 @@
 
 */
 nav#main-navigation {
-    /* height: 3em; */
+    height: 2.5em;
+    width: calc(100% - 1em);
+    width: calc(100vw - 1em);
     /* height: 3em; */
     background: white;
     content:"Testing 123";
     display:flex;
+    top:0;
     padding-left: 0.5em;
     padding-right: 0.5em;
-
+    background-color: var(--color-primary-0);
+    position: fixed;
+    z-index: 9999;
 }
+/* 
+The body should take the height 
+   of the fixed navigation into account
+*/
+/* body {
+    padding-top:1.5em !important;
+} */
 nav#main-navigation > div#brand {
     /* display: none; */
     flex-basis: 13em;
@@ -27,7 +39,7 @@ nav#main-navigation > div#nav-links {
     /* font-size: 2em; */
     /* flex-basis: 75%; */
     flex-grow:3;
-    display: flex;
+    display: inline-flex;
     justify-content: space-around;
     
 }
