@@ -1,7 +1,7 @@
 import React from "react"
 import "./About.css"
 import Card from "../Card/"
-import GithubLogo from "../../assets/img/GitHub_Logo.png"
+// import GithubLogo from "../../assets/img/GitHub_Logo.png"
 import GithubMark from "../../assets/img/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png"
 import LinkedInLogo from "../../assets/img/LinkedIn-Logos/In/Digital/Blue/1x/In-Blue-128.png"
 const About = (props) =>{
