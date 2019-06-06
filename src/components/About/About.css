@@ -1,7 +1,126 @@
-#About {
+div#About {
+    --name-base-size:2em;
     background-color: #F5EACE;
+    display: grid;
+    grid-template-rows: 1fr auto auto auto;
+    height:8em;
+}
+/* @media screen and (min-width:20.062em) {
+    div#About {
+        --name-base-size:10rem;
+        background-color:black;
+    }
+} */
+/* This media query targets 200px in EMs */
+@media screen and (min-width:18.7em) {
+    div#About {
+        --name-base-size:2.45em;
+        background-color: red;
+    }
+}
+/* this media query targets 320px in EMs */
+@media screen and (min-width: 30.0em) {
+    div#About {
+        --name-base-size:3.85em;
+        background-color: orange;
+    }
 }
 
+/* this media query targets 375px in EMs */
+@media screen and (min-width: 35.1em) {
+    div#About {
+        --name-base-size:4.625em;
+        background-color: green;
+    }
+}
+/* this media query targets 425px in EMs */
+@media screen and (min-width: 39.84em) {
+    div#About {
+        --name-base-size:5.085em;
+        background-color: skyblue;
+    }
+}
+/* this media query targets 768px in EMs */
+@media screen and (min-width: 71.71em) {
+    div#About {
+        --name-base-size:7.4375em;
+        background-color: purple;
+    }
+}
+/* this media query targets 1024px in EMs */
+@media screen and (min-width: 96.02em) {
+    div#About {
+        --name-base-size:8.74em;
+        background-color: violet;
+    }
+}
+
+
+div#About h1#name {
+    font-size:var(--name-base-size)
+}
+
+div#About h1, div#About h2, div#About h3 {
+    margin: 0;
+}
+
+div#About #about-container {
+    max-width: 40em;
+    margin-left: auto;
+    margin-right: auto;
+    /* display: flex; */
+}
+#About #about-container #profile-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+@media screen and (min-width:425px) {
+    div#About {
+        grid-template-columns: 8em 6fr;
+        grid-template-rows: 2em 1fr ;
+    }
+    div#About #name {
+        grid-row-start:1;
+        grid-row-end:2;
+        grid-column-start: 1;
+        grid-column-end:3;
+    }
+    div#About .subheading {
+        grid-row-start:2;
+        grid-row-end:3;
+        grid-column-start: 1;
+        grid-column-end:2;
+        vertical-align: bottom;
+    }
+    /* div#About #job-title {
+        grid-row-start:3;
+        grid-row-end:4;
+        grid-column-start: 1;
+        grid-column-end:2;
+    } */
+
+    #About #profile-links {
+        display: flex;
+        justify-content: left;
+        align-items: space-evenly;
+        flex-direction: column;
+        grid-row-start: 2;
+        grid-row-end: 3;
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+    #About #profile-links * {
+        display: block;
+    }
+    /* #About # */
+
+    /* #About #about-container #profile-links {
+
+        flex-direction: column;
+    } */
+}
 /* 
     The subheadings will be layed out as follows:
     
@@ -20,7 +139,7 @@
 #profile-links .profile-link {
 
 }
-#profile-links .profile-link img {
+#About img {
     /* 
     I will have to play with the font sizes later
     
