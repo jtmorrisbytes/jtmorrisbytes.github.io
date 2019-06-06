@@ -60,10 +60,18 @@ div#About {
         --name-base-size:10.061em;
     }
 }
+/* this media query targets 2560px in EMs */
+@media screen and (min-width: 240em) {
+    div#About {
+        --name-base-size:12.371em;
+        background-color:burlywood;
+    }
+}
 
 
 div#About h1#name {
-    font-size:var(--name-base-size)
+    font-size:var(--name-base-size);
+    line-height: 1.0em;
 }
 
 div#About h1, div#About h2, div#About h3 {
