@@ -7,20 +7,31 @@
 
 */
 nav#main-navigation {
+    box-sizing: border-box;
     height: 2.5em;
-    width: calc(100% - 1em);
-    width: calc(100vw - 1em);
+    width:100%;
     /* height: 3em; */
-    background: white;
-    content:"Testing 123";
     display:flex;
-    top:0;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+
+    display:grid;
+    grid-auto-flow: column;
+    /* grid-template-columns:  */
+
+
+    padding-left: 1em;
+    padding-right:1em;
     background-color: var(--color-primary-0);
-    position: fixed;
+    position:sticky;
+    top:0;
+    position:-webkit-sticky;
     z-index: 9999;
+    
 }
+nav#main-navigation * {
+    height: 100%;
+    line-height: 2.5rem !important;
+}
+
 /* 
 The body should take the height 
    of the fixed navigation into account
@@ -29,20 +40,33 @@ The body should take the height
     padding-top:1.5em !important;
 } */
 nav#main-navigation > div#brand {
-    /* display: none; */
-    flex-basis: 13em;
-    flex-shrink: 0.33;
+    display: none;
+    /* flex-basis: 13em; */
+    flex-shrink: 1;
     /* flex-grow: 1; */
 }
-
-nav#main-navigation > div#nav-links {
+nav#main-navigation > div#brand > p {
+    font-family: "TenbyFive", serif;
+}
+@media screen and (min-width:19em){
+    nav#main-navigation > div#brand {
+        display: initial;
+        /* flex-basis: initial; */
+        /* flex-grow: 1; */
+    }
+}
+nav#main-navigation > a {
     /* font-size: 2em; */
     /* flex-basis: 75%; */
-    flex-grow:3;
-    display: inline-flex;
-    justify-content: space-around;
+    /* flex-grow:3;
+    display: inline-flex; */
+    /* justify-content: space-around; */
+    text-align: center;
     
 }
+/* nav#main-navigation a {
+    display: inline-block;
+} */
 
 nav#main-navigation > div#brand > p.logo-text {
     margin:0px;
@@ -51,15 +75,18 @@ nav#main-navigation > div#brand > p.logo-text {
     text-overflow: ellipsis;
 }
 
-nav#main div#brand img {
+/* nav#main div#brand img {
 
-}
+} */
+
+/* TODO: recalculate breakpoints in ems */
 
 
 @media screen and (min-width:375px) {
-    nav#main-navigation > div#nav-links a,
-    nav#main-navigation > div#brand > p.logo-text {
+    nav#main-navigation > a,
+    nav#main-navigation > p {
     font-size: 1.125em;
+    }
 }
 @media screen and ( min-width: 425px){
     nav#main-navigation > div#nav-links a,
@@ -77,15 +104,8 @@ nav#main div#brand img {
     nav#main-navigation {
         /* height: 2em; */
         /* height: 4em; */
-        padding-left: 1em;
-        padding-right: 1em;
+        /* padding-left: 1em;
+        padding-right: 1em; */
     }
 
-}
-
-}
-@media screen and (min-width:768px) {
-    nav#main-navigation > div#brand{
-        display: initial;
-    }
 }

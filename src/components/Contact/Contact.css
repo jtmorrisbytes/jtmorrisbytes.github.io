@@ -1,0 +1,27 @@
+#Contact {
+    background-color: var(--color-primary-4);
+    flex-direction: column;
+}
+
+#Contact form input, #Contact form textarea {
+    width:100%;
+    font-size: 1rem;
+    box-sizing: border-box;
+
+}
+#Contact form textarea {
+    
+}
+#Contact > h1 {
+    text-align: center;
+}
+#Contact form label {
+    display: none;
+}
+#Contact > #profile-links {
+    display: flex;
+    flex-direction: row;
+}
+#Contact form textarea {
+    height: 10em;
+}

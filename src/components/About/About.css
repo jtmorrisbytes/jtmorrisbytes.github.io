@@ -1,9 +1,12 @@
 div#About {
     --name-base-size:2em;
+    --job-scope-size: calc(var(--name-base-size) * 1.07); 
+    --job-title-size: calc(calc(var(--job-scope-size) * 1.97) / 3); 
     background-color: #F5EACE;
     display: grid;
     grid-template-rows: 1fr auto auto auto;
-    height:calc(var(--name-base-size) + 8em);
+    padding:0.125em;
+    /* height:calc(var(--name-base-size) + var(--job-scope-size)); */
 }
 /* @media screen and (min-width:20.062em) {
     div#About {
@@ -15,6 +18,7 @@ div#About {
 @media screen and (min-width:18.7em) {
     div#About {
         --name-base-size:2.45em;
+        font-size: 2.45em;
         background-color: red;
     }
 }
@@ -22,6 +26,7 @@ div#About {
 @media screen and (min-width: 30.0em) {
     div#About {
         --name-base-size:3.85em;
+        font-size:3.85em;
         background-color: orange;
     }
 }
@@ -30,6 +35,7 @@ div#About {
 @media screen and (min-width: 35.1em) {
     div#About {
         --name-base-size:4.625em;
+        font-size:4.625em;
         background-color: green;
     }
 }
@@ -44,6 +50,7 @@ div#About {
 @media screen and (min-width: 71.71em) {
     div#About {
         --name-base-size:7.4375em;
+        font-size:7.4375em;
         background-color: purple;
     }
 }
@@ -51,6 +58,7 @@ div#About {
 @media screen and (min-width: 96.02em) {
     div#About {
         --name-base-size:8.74em;
+        font-size:8.74em;
         background-color: violet;
     }
 }
@@ -58,21 +66,112 @@ div#About {
 @media screen and (min-width: 135.0000em) {
     div#About {
         --name-base-size:10.061em;
+        font-size: 10.061em;
     }
 }
 /* this media query targets 2560px in EMs */
 @media screen and (min-width: 240em) {
     div#About {
-        --name-base-size:12.371em;
+        --name-base-size:11.9em;
         background-color:burlywood;
     }
 }
+/* for some reason, 
+   google chrome calcualtes EM units differently than firefox and microsoft edge */
+@supports( -moz-appearance: initial) or (display: -ms-grid) {
+    /* This media query targets 200px in EMs */
+    @media screen and (min-width:12.5em) {
+        div#About {
+            --name-base-size:1.5em;
+            font-size:1.5em;
+            background-color: pink;
+        }
+    }
+    /* this media query targets 320px in EMs */
+    @media screen and (min-width: 20em) {
+        div#About {
+            --name-base-size:2.44em;
+            font-size:2.44em;
+            background-color: khaki;
+        }
+    }
+
+
+
+
+
+
+   /* this media query targets 375px in EMs */
+    @media screen and (min-width: 23.4375em) {
+        div#About {
+            --name-base-size:2.85em;
+            font-size: 2.85em;
+            background-color: limegreen;
+        }
+    }
+    /* this media query targets 425px in EMs */
+    @media screen and (min-width: 26.5625em) {
+        div#About {
+            --name-base-size:3em;
+            font-size:3em;
+            background-color: skyblue;
+        }
+    }
+    /* this media query targets 768px in EMs */
+    @media screen and (min-width: 48em) {
+        div#About {
+            --name-base-size:4.9em;
+            font-size: 4.9em;
+            background-color: goldenrod;
+        }
+    }
+    /* this media query targets 1024px in EMs */
+    @media screen and (min-width: 64em) {
+        div#About {
+            --name-base-size:6em;
+            font-size: 6em;
+            background-color: violet;
+        }
+    }
+    /* this media query targets 1440px in EMs */
+    @media screen and (min-width: 90em) {
+        div#About {
+            --name-base-size:7.35em;
+            font-size: 7.35em;
+        }
+    }
+    /* this media query targets 2560px in EMs */
+    @media screen and (min-width: 160em) {
+        div#About {
+            --name-base-size:9.8em;
+            background-color:burlywood;
+            font-size: 9.8em;
+        }
+    }
+}
+  
+
+
+
 
 
 div#About h1#name {
-    font-size:var(--name-base-size);
+    font-size:100%;
+
+}
+div#About h2#job-scope {
+    font-size: var(--job-scope-size);
+    font-size: 100%;
+}
+div#About h3#job-title {
+    font-size: var(--job-title-size);
+    font-size: .65em;
+}
+
+div#About h1#name , div#About h2#job-scope, div#About h3#job-title {
     line-height: 1.0em;
 }
+
 
 div#About h1, div#About h2, div#About h3 {
     margin: 0;
@@ -92,8 +191,8 @@ div#About #about-container {
 }
 @media screen and (min-width:425px) {
     div#About {
-        grid-template-columns: 8em 6fr;
-        grid-template-rows: calc(var(--name-base-size)) 1fr ;
+        grid-template-columns: 4.05em 1fr;
+        grid-template-rows: 1.3em 1em .65em;
     }
     div#About #name {
         grid-row-start:1;
@@ -101,33 +200,35 @@ div#About #about-container {
         grid-column-start: 1;
         grid-column-end:3;
     }
-    div#About .subheading {
+    div#About #job-scope{
         grid-row-start:2;
         grid-row-end:3;
         grid-column-start: 1;
         grid-column-end:2;
         vertical-align: bottom;
     }
-    /* div#About #job-title {
+    div#About #job-title {
         grid-row-start:3;
         grid-row-end:4;
         grid-column-start: 1;
         grid-column-end:2;
-    } */
+    }
 
     #About #profile-links {
-        display: flex;
+        display: grid;
         justify-content: left;
         align-items: space-evenly;
         flex-direction: column;
         grid-row-start: 2;
-        grid-row-end: 3;
+        grid-row-end: 4;
         grid-column-start: 2;
         grid-column-end: 3;
     }
     #About #profile-links * {
         display: block;
+        font-size: .8em;
     }
+
     /* #About # */
 
     /* #About #about-container #profile-links {
@@ -153,10 +254,24 @@ div#About #about-container {
 #profile-links .profile-link {
 
 }
-#About img {
+#About #profile-links img {
     /* 
     I will have to play with the font sizes later
     
     */
-    max-height: 1em;
+    width: auto;
+    height:1em;
+}
+#About #profile-links > a > img {
+    background-color: white;
+}
+#About img#github-logo {
+    /* border:0px solid; */
+    
+    border-radius: 51%;
+}
+#About img#linkedin-logo {
+    /* border:0px solid; */
+    
+    border-radius: 8%;
 }
