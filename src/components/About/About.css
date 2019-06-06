@@ -3,7 +3,7 @@ div#About {
     background-color: #F5EACE;
     display: grid;
     grid-template-rows: 1fr auto auto auto;
-    height:8em;
+    height:calc(var(--name-base-size) + 8em);
 }
 /* @media screen and (min-width:20.062em) {
     div#About {
@@ -54,6 +54,12 @@ div#About {
         background-color: violet;
     }
 }
+/* this media query targets 1440px in EMs */
+@media screen and (min-width: 135.0000em) {
+    div#About {
+        --name-base-size:10.061em;
+    }
+}
 
 
 div#About h1#name {
@@ -79,7 +85,7 @@ div#About #about-container {
 @media screen and (min-width:425px) {
     div#About {
         grid-template-columns: 8em 6fr;
-        grid-template-rows: 2em 1fr ;
+        grid-template-rows: calc(var(--name-base-size)) 1fr ;
     }
     div#About #name {
         grid-row-start:1;
