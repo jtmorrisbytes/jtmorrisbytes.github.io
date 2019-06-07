@@ -12,9 +12,10 @@ div#About {
     }
 } */
 /* This media query targets 200px in EMs */
-@media screen and (min-width:18.7em) {
+@media screen and (min-width:12.5em) {
     div#About {
-        font-size: 2.45em;
+        font-size: 1.6em;
+        background-color: red;
     }
 }
 /* this media query targets 320px in EMs */
@@ -115,7 +116,11 @@ div#About {
         }
     }
 }
-  
+@supports(( -moz-appearance: initial) or (display: -ms-grid)) and (font-size: calc(1em + 1vw)) {
+    div#About {
+        font-size: calc(1em + 12vw);
+    }
+}
 
 
 
