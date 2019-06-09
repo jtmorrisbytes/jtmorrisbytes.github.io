@@ -18,7 +18,7 @@ const ProjectCard = (props) => {
     const defaultLiveUrl = "#";
     const defaultSourceUrl = "https://www.github.com/jtmorrisbytes/";
     return <Card className="project-card">
-        <h3 className="project-name">{props.name || defaultProjectName}</h3>
+        <h2 className="project-name">{props.name || defaultProjectName}</h2>
         <img className="project-photo"
              src={props.photoUrl || defaultProjectPhotoUrl}
              alt={props.photoAlt || defaultProjectPhotoAltText} />

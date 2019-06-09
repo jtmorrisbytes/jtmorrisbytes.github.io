@@ -1,11 +1,7 @@
 div.project-card {
     background-color: var(--color-primary-1);
     /* border-radius: 1em; */
-    --card-height: calc(24em - var(--class-card-padding)) ;
-    /* height: var(--card-height);
-    --header-height: calc(calc(var(--card-height) / 100) * 10);
-    --image-height: calc(calc(var(--card-height) / 100) * 60);
-    --links-height: calc(calc(var(--card-height) / 100) * 20); */
+
     position: relative;
     /* padding-top: .5em; */
     padding-bottom:0;
@@ -41,15 +37,16 @@ div.project-card > object, div.project-card > iframe, div.project-card embed {
 /* style the group of source links */
 div.project-card div.source-links {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     vertical-align: middle;
+    max-width: 95%;
+    margin-left:auto;
+    margin-right:auto;
 
 }
-@media screen and (max-width:200px) {
-    div.project-card div.source-links {
-    flex-direction: column;
-
-    }
+div.project-card h2.project-name {
+    font-size:0.9em;
+    font-size:calc(0.9em + 1vw) ;
 }
 
 div.project-card > div.source-links  a[type='button'] {
@@ -87,13 +84,7 @@ div.project-card a[type='button'] {
     text-decoration: none;
     padding: 0.2em 0.5em;
     font-weight: bold;
-
-    /* border-left: 0.1667em solid var(--color-complement-3);
-    border-left: var(--border-left) solid var(--color-complement-3);
-
-    border-right: 0.1667em solid var(--color-complement-3);
-    border-right: var(--border-right) solid var(--color-complement-3); */
-
+    font-size:0.6em;
     border-bottom: 0.25em solid var(--color-complement-4);
     border-bottom: var(--border-bottom) solid var(--color-complement-4);
     margin:0.5em;
@@ -115,15 +106,57 @@ div.project-card a[type='button']:hover {
     cursor: pointer;
 }
 div.project-card a[type='button']:active {
-    /* border-left: 0.05em solid var(--color-complement-3);
-    border-left: calc(var(--border-left) / 2) solid var(--color-complement-3);
- 
-    border-right: 0.05em solid var(--color-complement-3);
-    border-right: calc(var(--border-right) /2) solid var(--color-complement-3); */
-
     border-bottom: calc(var(--border-bottom) / 2) solid var(--color-complement-3);
-    /* transform:rotate(100deg); */
-    /* transform: translateY(0.125em) */
     margin-top: calc(0.5em + calc(var(--border-bottom) / 2));
 
+}
+/* mobile first! media queries */
+@media screen and (min-width:12.5em) {
+    div.project-card h2.project-name {
+        font-size:0.9125em;
+        font-size: calc(0.9125em + 3.5vw);
+    }
+    div.project-card div.source-links  a[type='button']{
+        font-size:calc(0.6em + 1vw);
+     }
+
+}
+/* this media query targets 320px in EMs */
+@media screen and (min-width: 20em) {
+    div.project-card h2.project-name {
+        font-size:1.6125em;
+        font-size: calc(1.1625em + 3.5vw);
+    }
+    div.project-card div.source-links {
+       flex-direction: row;
+    }
+}
+
+/* this media query targets 375px in EMs */
+@media screen and (min-width: 23.4375em) {
+    div.project-card h2.project-name {
+        font-size: 1.9828125em;
+        font-size: calc(1.9828125em + 3.5vw);
+    }
+}
+/* this media query targets 425px in EMs */
+@media screen and (min-width: 26.5625em) {
+    div.project-card h2.project-name {
+        font-size: 1.8421875em;
+        font-size: calc(0.9125em + 3.5vw);
+    }
+}
+/* this media query targets 768px in EMs */
+@media screen and (min-width: 48em) {
+    div.project-card h2.project-name {
+        font-size: 2.5903125‬em !important;
+    }
+ 
+}
+
+/* this media query targets 1440px in EMs */
+@media screen and (min-width: 90em) {
+    div.project-card div.sourcelinks {
+        font-size: 1.5em;
+    }
 }
