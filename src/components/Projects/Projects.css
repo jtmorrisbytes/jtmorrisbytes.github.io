@@ -14,17 +14,6 @@ div#Projects > div#projects-grid {
     grid-auto-flow: row;
     grid-gap: 0.25em;
 }
-
-@media screen and (orientation:landscape) {
-    div#Projects div#projects-grid {
-        grid-template-columns: 1fr 1fr;
-
-    }
-}
-
-
-
-
 /*
     There is more room on mobile phones in landscape mode.
     lets program the grid to take advantage of the extra space
@@ -32,43 +21,49 @@ div#Projects > div#projects-grid {
     48ems min-width targets tablets with the current font scheme
 */
 
-@media screen and (min-width:32em) {
-    div#Projects div#projects-grid {
-        grid-template-columns: 1fr 1fr 1fr;
+@media screen and (min-width:12.5em) {
+    div#Projects {
+    }
+}
+/* this media query targets 320px in EMs */
+@media screen and (min-width: 20em) {
+    div#Projects {
+    }
+}
+
+/* this media query targets 375px in EMs */
+@media screen and (min-width: 23.4375em) {
+    div#Projects {
 
     }
 }
-@media screen and (orientation: portrait) and (min-width:32em) {
+/* this media query targets 425px in EMs */
+@media screen and (min-width: 26.5625em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr;
-
     }
 }
-@media screen and (min-width:48em) {
+/* this media query targets 768px in EMs */
+@media screen and (min-width: 48em) {
+    div#Projects {
+    }
+}
+/* this media query targets 1024px in EMs */
+@media screen and (min-width: 64em) {
+    div#Projects {
+    }
+}
+/* this media query targets 1440px in EMs */
+@media screen and (min-width: 90em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr 1fr;
-
     }
 }
-@media screen and (orientation:portrait) and (min-width:48em) {
-    div#Projects div#projects-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-
-    }
-}
-@media screen and  (min-width:64em) {
-    div#Projects div#projects-grid {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-
-    }
-}
-@media screen and (orientation:portrait) and  (min-width:64em) {
+@media screen and (min-width: 160em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr 1fr 1fr;
-
     }
 }
-
 /* @media screen and (orientation:landscape) and (min-width:72em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr 1fr 1fr;
