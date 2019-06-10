@@ -7,7 +7,9 @@ import GithubMark from "../../assets/img/GitHub-Mark/PNG/GitHub-Mark-120px-plus.
 import LinkedInLogo from "../../assets/img/LinkedIn-Logos/In/Digital/Blue/1x/In-Blue-128.png"
 const About = (props) =>{
     return <Card id='About'>
-            <a id="About"></a>
+        <a id="to-about"></a>
+        <div id='about-container'>
+            
             <h1 id='name'>Jordan Morris</h1>
             {/* add padding after the name */}
             {/* <div className="subheading"> */}
@@ -20,6 +22,7 @@ const About = (props) =>{
                     <img id='linkedin-logo' src={LinkedInLogo} alt="Linked In" />
                 </a>
             </div>
+        </div>
         
     </Card>
 }

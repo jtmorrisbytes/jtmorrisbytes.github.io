@@ -4,12 +4,16 @@
   "private": true,
   "dependencies": {
     "@types/prop-types": "^15.7.1",
+    "@types/selenium-webdriver": "^4.0.0",
     "gh-pages": "^2.0.1",
+    "global": "^4.3.2",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
+    "react-app-polyfill": "^1.0.1",
     "react-codepen-embed": "^0.1.0",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "selenium-webdriver": "^4.0.0-alpha.1"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -33,5 +37,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "chromedriver": "^74.0.0",
+    "geckodriver": "^1.16.2",
+    "nightwatch": "^1.1.11"
   }
 }
