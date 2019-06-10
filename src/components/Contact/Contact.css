@@ -43,7 +43,7 @@
 #Contact form input[type='submit'] {
     font-size: calc(1em + .825vw);
 }
-@media screen and (min-width: 90em) {
+@media  (min-width: 90em) {
     #Contact #contact-form-header {
         font-size: 2.9em;
     }

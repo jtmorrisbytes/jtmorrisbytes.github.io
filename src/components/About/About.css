@@ -8,20 +8,20 @@ div#About {
 
     /* height:calc(var(--name-base-size) + var(--job-scope-size)); */
 }
-/* @media screen and (min-width:20.062em) {
+/* @media and (min-width:20.062em) {
     div#About {
         --name-base-size:10rem;
         background-color:black;
     }
 } */
-@media screen and (min-width:12.5em) {
+@media and (min-width:12.5em) {
     div#About {
         font-size:1.97em;
         font-size: calc(1em + 7.5vw);
     }
 }
 /* this media query targets 320px in EMs */
-@media screen and (min-width: 20em) {
+@media and (min-width: 20em) {
     div#About {
         font-size: 3.1em;
         font-size: calc(1em + 10.5vw);
@@ -29,35 +29,35 @@ div#About {
 }
 
 /* this media query targets 375px in EMs */
-@media screen and (min-width: 23.4375em) {
+@media and (min-width: 23.4375em) {
     div#About {
         font-size: 3.7em;
         font-size: calc(1em + 11.515vw);
     }
 }
 /* this media query targets 425px in EMs */
-@media screen and (min-width: 26.5625em) {
+@media and (min-width: 26.5625em) {
     div#About {
         font-size:4.21em;
         font-size: calc(1em + 12.1vw);
     }
 }
 /* this media query targets 768px in EMs */
-@media screen and (min-width: 48em) {
+@media and (min-width: 48em) {
     div#About {
         font-size: 7.75em;
         font-size: calc(1em + 14.125vw);
     }
 }
 /* this media query targets 1024px in EMs */
-@media screen and (min-width: 64em) {
+@media and (min-width: 64em) {
     div#About {
         font-size: 10.45em;
         font-size: calc(1em + 14.761vw);
     }
 }
 /* this media query targets 1440px in EMs */
-@media screen and (min-width: 90em) {
+@media and (min-width: 90em) {
     div#About {
         font-size: 14.79em;
     }
@@ -66,7 +66,7 @@ div#About {
    google chrome calcualtes EM units differently than firefox and microsoft edge */
 @supports( -moz-appearance: initial) or (display: -ms-grid) {
     /* this media query targets 320px in EMs */
-    @media screen and (min-width: 20em) {
+    @media and (min-width: 20em) {
         div#About {
             font-size: 3em;
             font-size: calc(1em + 10vw);
@@ -74,28 +74,28 @@ div#About {
 
     }
     /* this media query targets 425px in EMs */
-    @media screen and (min-width: 26.5625em) {
+    @media and (min-width: 26.5625em) {
         div#About {
             font-size:4.055em;
             font-size: calc(1em + 11.5vw);
         }
     }
     /* this media query targets 768px in EMs */
-    @media screen and (min-width: 48em) {
+    @media and (min-width: 48em) {
         div#About {
             font-size: 7.5em;
             font-size: calc(1em + 13.55vw);
         }
     }
     /* this media query targets 1024px in EMs */
-    @media screen and (min-width: 64em) {
+    @media and (min-width: 64em) {
         div#About {
             font-size: 10em;
             font-size: calc(1em + 14vw);
         }
     }
     /* this media query targets 1440px in EMs */
-    @media screen and (min-width: 90em) {
+    @media and (min-width: 90em) {
         div#About {
             font-size: 14.125em;
         }
@@ -141,7 +141,7 @@ div#About #about-container {
     align-items: center;
     flex-direction: row;
 }
-@media screen and (min-width:425px) {
+@media and (min-width:425px) {
     div#About {
         grid-template-columns: 5em 1fr;
         grid-template-rows: 1.3em 1em .65em;

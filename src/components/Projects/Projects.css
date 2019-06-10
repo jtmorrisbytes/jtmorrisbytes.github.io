@@ -21,50 +21,50 @@ div#Projects > div#projects-grid {
     48ems min-width targets tablets with the current font scheme
 */
 
-@media screen and (min-width:12.5em) {
+@media  (min-width:12.5em) {
     div#Projects {
     }
 }
 /* this media query targets 320px in EMs */
-@media screen and (min-width: 20em) {
+@media  (min-width: 20em) {
     div#Projects {
     }
 }
 
 /* this media query targets 375px in EMs */
-@media screen and (min-width: 23.4375em) {
+@media  (min-width: 23.4375em) {
     div#Projects {
 
     }
 }
 /* this media query targets 425px in EMs */
-@media screen and (min-width: 26.5625em) {
+@media  (min-width: 26.5625em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr;
     }
 }
 /* this media query targets 768px in EMs */
-@media screen and (min-width: 48em) {
+@media  (min-width: 48em) {
     div#Projects {
     }
 }
 /* this media query targets 1024px in EMs */
-@media screen and (min-width: 64em) {
+@media  (min-width: 64em) {
     div#Projects {
     }
 }
 /* this media query targets 1440px in EMs */
-@media screen and (min-width: 90em) {
+@media  (min-width: 90em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr 1fr;
     }
 }
-@media screen and (min-width: 160em) {
+@media  (min-width: 160em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }
-/* @media screen and (orientation:landscape) and (min-width:72em) {
+/* @media  (orientation:landscape) and (min-width:72em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr 1fr 1fr;
 
@@ -78,7 +78,7 @@ div#Projects > div#projects-grid {
     The next target for grid-template-columns will be desktop resolutions
     find the breakpoint for 1440px
 */
-@media screen and (min-width: 160em) {
+@media  (min-width: 160em) {
     div#Projects div#projects-grid {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 
