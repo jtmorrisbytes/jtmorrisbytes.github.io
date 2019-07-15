@@ -9,7 +9,7 @@ const Contact = (props) => {
     <a id='#Contact' ></a>
     <div id='contact-content-container'>
         <h1 id="contact-form-header">Get In Touch</h1>
-        <form id="contact-form" action='/#/' method="GET" rel='noopener noreferrer'  >
+        <form id="contact-form" action='https://formspree.io/jtmorrisbytes@gmail.com' method="POST" rel='noopener noreferrer'  >
             
             <div id={"name-group"}>
                 <label id="contact-label" htmlFor='contact-name'>Name:</label>
@@ -17,7 +17,7 @@ const Contact = (props) => {
             </div>
             <div id={"email-group"}>
                 <label id="email-label" htmlFor='contact-email'>Email:</label>
-                <input id='contact-email' type='email' placeholder='Email: abc@123.com' name='email' />
+                <input id='contact-email' type='email' placeholder='Email: abc@123.com' name='_replyto' />
             </div>
             <div id={"subject-group"}>
                 <label id="subject-label" htmlFor='contact-subject'></label>
@@ -27,7 +27,7 @@ const Contact = (props) => {
                 <label htmlFor='contact-message' ></label>
                 <textarea id='contact-message' placeholder="Your message: 500 characters or less" name="message" />
             </div>
-            <input type='submit' ></input>
+            <input type='submit' value='Send'></input>
             
         </form>  
     </div>
