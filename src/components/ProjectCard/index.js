@@ -2,7 +2,7 @@ import React from "react";
 import Card from "../Card";
 import "./ProjectCard.css"
 import PropTypes from "prop-types"
-
+import request from "superagent"
 // IDEA: Embed a live view of the project directly into the card
 // 
 
@@ -15,6 +15,10 @@ const ProjectCard = (props) => {
     const defaultProjectPhotoUrl = "https://via.placeholder.com/800x450"
     const defaultProjectPhotoAltText = "A Default project placeholder photo"
     // const defualtProjectDescription = "Please check that this card initialized properly"
+
+
+
+
     const defaultLiveUrl = "#";
     const defaultSourceUrl = "https://www.github.com/jtmorrisbytes/";
     return <Card className="project-card">
@@ -22,7 +26,7 @@ const ProjectCard = (props) => {
         <img className="project-photo"
              src={props.photoUrl || defaultProjectPhotoUrl}
              alt={props.photoAlt || defaultProjectPhotoAltText} />
-        {/* <p>{props.projectDescription || defualtProjectDescription}</p> */}
+        <p>{props.description}</p>
         <div className="source-links">
             <a type='button' rel="noopener noreferer"  target={"_blank"} href={props.liveUrl || defaultLiveUrl }>Live View</a>
             <a type='button' rel="noopener noreferer"  target={"_blank"} href={props.sourceUrl || defaultSourceUrl }>View Source</a>
