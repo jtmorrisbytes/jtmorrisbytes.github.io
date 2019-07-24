@@ -7,77 +7,6 @@ import superagent from "superagent"
 
 
 
-
-
-
-
-
-
-// const Projects = (props) => {
-//     // TODO: Add data source for all projects
-//     window.projectContext = this;
-//     const githubAccessToken = "bfc90dc0860aca9063a8670dfb4bbcb68bb73dfd"
-//     const numProjectsPerPage = 6;
-//     let currentPage = 1
-//     let repositories = null;
-//     const apiUrl = "https://api.github.com/graphql"
-//     const githubLogin = "jtmorrisbytes"
-//     let githubApiAvailable =false;
-//     let authenticationSucceded = false;
-//     let loadingRepositories = false;
-//     let schema = null;
-
-//     // const githubApiHttp = new HttpLink({uri:apiUrl})
-//     // console.log("HTTPLINK", githubApiHttp)
-//     // const link = setContext((request, previousContext) => ({
-//     //     headers: {
-//     //       'Authorization': `Bearer ${githubAccessToken}`,
-//     //     }
-//     //   })).concat(githubApiHttp);
-   
-
-
-
-
-//     const projectMockObject = {
-//         name:"",
-//         description:"",
-//         photoUrl:"",
-//         photoAltText:"",
-//     }
-//     // let projects = []
-//     // for(let i=0; i< 10; i++) {
-//     //     console.log(i)
-//     //     let newMockObject = Object.assign({
-//     //         name:"Test Project " + i,
-//     //         description:"A test Project number " + i,
-//     //         photoAltText: "A test Project photo for project number " + i
-//     //     },projectMockObject)
-//     //     projects.push(
-//     //     <ProjectCard name={projectMockObject.name} key={"test-project-"+i}/>)
-//     // }
-//     // console.log(projects)
-//     let projects = [];
-    
-//     if (repositories) {
-//         projects = repositories.edges.map(
-//             (repository) =>{
-//                 return <ProjectCard name={repository.name} key={repository.name} />
-//             }
-//         ) 
-//     }
-//     console.log(projects)
-//     return <Card id="Projects">
-//             {/* <h2 id="header">My Projects</h2> */}
-//             <div id="projects-grid">
-//                 {/* <CodePenEmbedded hash={"qvQqwb"} user={"jtmorrisbytes"} /> */}
-//                 {/* I am placing a few default project cards here until layout is finalized*/}
-//                 { projects }
-
-//             </div>
-//     </Card>
-// }
-
 class Projects extends React.Component {
     state = {
         repositories:null,
@@ -96,56 +25,25 @@ class Projects extends React.Component {
         .set('authorization', `Bearer ${this.props.accessToken}`)
         .set('content-type','application/json')
         .set('accept',"application/json")
-        .send(`{"query": "query { user(login:${this.props.login}){ repositories(first:${this.state.itemsPerPage},privacy:PUBLIC) { totalCount, edges{cursor, node { name, description, url } } } } }"}`)
+        .send(`{"query": "query { user(login:${this.props.login}){ repositories(first:${this.state.itemsPerPage}after:${JSON.stringify('"1"')},privacy:PUBLIC) { totalCount, edges{cursor, node { name, description, url } } } } }"}`)
         .then(
         response => {
-            console.log("data: ", response.body )
-            if(response.body.data) {
-                let repositories = 
-                {...response.body.data.user.repositories,
-                    edges: response.body.data.user.repositories.edges.map(
-                            (repository)=>{
-                                let foundPackageJson = false;
-
-                                var result =null;
-                                superagent.get(`https://raw.githubusercontent.com/${this.props.login}/${repository.node.name}/master/portfolio-info.json?token=${this.props.accessToken}`)
-                                .end((response,error) =>{
-                                    if(error) {
-                                        if (error.statusCode ===404) {
-                                            /*
-                                                if the file isnt found, assume that the project should not
-                                                be shown on the portfolio.
-                                            
-                                            */
-                                            result= false
-                                        }
-                                        console.log("RECIEVED_ERROR_RESPONSE",error)
-                                    }
-                                    else if(response) {
-                                        console.log("RECIEVED_RESPONSE",response)
-                                        if(response.statusCode) {
-                                            console.log("RESPONSE_STATUS",response.statusCode)
-                                        }
-                                        
-                                    }
-                                })
-                                console.log("FETCH_PROJECT_INFO_RESULT",result)
-                                
-                            }
-                        )
-                    
-                }
-                this.setState({repositories :response.body.data.user.repositories, loading:true})
-                
+            if(((response.body.data || {}).user || {}).repositories) {
+                this.setState({repositories :response.body.data.user.repositories, loading:false})
             }
             else  {
-                console.error("the project data was unavailable")
                 this.setState({loading:false, error:true})
             }
-            if (!response.body.data.errors) {
+            if (!response.body.errors) {
                 return response.body.data.user.repositories.edges;
             }
-            else return response.body.data
+            else {
+                Array.from(response.body.errors).forEach(({message})=>console.error(message))
+                return response.body.errors;
+            } 
+            
+            
+            
             
             
             },
@@ -162,28 +60,47 @@ class Projects extends React.Component {
     else if (this.state.repositories) {
         projects = this.state.repositories.edges.map(
             (repository) =>{
-                console.log("REPOSITORY",repository)
                 return <ProjectCard 
                         name={repository.node.name}
                         login={this.props.login}
                         sourceUrl={repository.node.url} key={repository.node.name}
                         description={repository.node.description}
-                        token={this.props.accessToken}
+                        accessToken={this.props.accessToken}
                 />
             }
-        ) 
+        ) || []
     }
-    console.log(projects)
-    return (<Card id="Projects">
-            {/* <h2 id="header">My Projects</h2> */}
-            <div id="projects-grid">
-                {/* <CodePenEmbedded hash={"qvQqwb"} user={"jtmorrisbytes"} /> */}
-                {/* I am placing a few default project cards here until layout is finalized*/}
-                { projects }
+    if(this.state.error) {
+        return (
+        // Create something to show that there are no repositories to show yet
+        <Card id='Projects'>
+        <p>An error occured. please contact me below </p>
+        </Card>
+        )
+    }
+    else {
+        if (projects.length === 0) {
+        return (
+            // Create something to show that there are no repositories to show yet
+            <Card id='Projects'>
+            <p>No projects to show yet</p>
+            </Card>
+        )}
+        else {
+            return (<Card id="Projects">
+                {/* <h2 id="header">My Projects</h2> */}
+                <div id="projects-grid">
+                    {/* <CodePenEmbedded hash={"qvQqwb"} user={"jtmorrisbytes"} /> */}
+                    {/* I am placing a few default project cards here until layout is finalized*/}
+                    { projects }
+    
+                </div>
+        </Card>)
+        }
+    }
 
-            </div>
-    </Card>)
     }
+    
 }
 
 

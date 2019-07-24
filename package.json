@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@octokit/graphql": "^3.0.1",
     "@types/prop-types": "^15.7.1",
     "@types/selenium-webdriver": "^4.0.0",
     "apollo-link-context": "^1.0.18",
