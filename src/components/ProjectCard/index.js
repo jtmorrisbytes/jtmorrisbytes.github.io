@@ -7,8 +7,12 @@ import request from "superagent"
 // 
 
 
-
-
+const Button = (props) => {
+    return (!props.url && !props.default) ? (<a type='button' rel="noopener noreferer"
+        target={"_blank"} href={props.url || props.default }>{props.children}</a>)
+    : <></>;
+    
+}
 
 const ProjectCard = (props) => {
     const defaultProjectName = "Test Project";
@@ -28,8 +32,8 @@ const ProjectCard = (props) => {
              alt={props.photoAlt || defaultProjectPhotoAltText} />
         <p>{props.description}</p>
         <div className="source-links">
-            <a type='button' rel="noopener noreferer"  target={"_blank"} href={props.liveUrl || defaultLiveUrl }>Live View</a>
-            <a type='button' rel="noopener noreferer"  target={"_blank"} href={props.sourceUrl || defaultSourceUrl }>View Source</a>
+            <Button url={props.liveUrl}>Live View</Button>
+            <Button url={props.sourceUrl}>View Source</Button>
         </div>
     </Card>
 }
