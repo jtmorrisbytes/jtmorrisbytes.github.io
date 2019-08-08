@@ -14,7 +14,9 @@ const PaginationControls = ( props ) => {
     let style = {
         button : {
             enabled: {
-                cursor: "pointer"
+                cursor: "pointer",
+                fontSize:"1.25em",
+                width:"1.25em"
             },
             disabled :{
                 cursor: "not-allowed",
@@ -23,7 +25,7 @@ const PaginationControls = ( props ) => {
         }
     }
     return (
-        <div style={{display:"flex", justifyContent:"space-between"}} id='pagination-controls'>
+        <div style={{display:"flex", justifyContent:"space-between", fontSize:"1.25em"}} id='pagination-controls'>
             <button style={(props.hasPreviousPage && !props.loading) ? style.button.enabled : style.button.disabled} type="button" onMouseUp={props.previousPageAction || noOp}> &lt; </button>
             <div style={{display:"inline-flex"}}id='items-per-page-controls'>
             <button style={(props.decreaseItemsPerPageAction && props.canDecreaseItemsPerPage) ? style.button.enabled: style.button.disabled}
@@ -118,7 +120,7 @@ class Projects extends React.Component {
         //Set the loading state to let users know that an operation is in progress
         this.setState({...this.setState,loading:true});
         //build the query from a querystring
-        let query = '{"query": "query { user(login: $login ){ repositories(first:$itemsPerPage, $cursor privacy:PUBLIC) { pageInfo{ startCursor,endCursor,hasNextPage,hasPreviousPage}, totalCount, edges{ cursor, node {  name, description, url } } } } }"}';
+        let query = '{"query": "query { user(login: $login ){ repositories(first:$itemsPerPage, $cursor privacy:PUBLIC) { pageInfo{ startCursor,endCursor,hasNextPage,hasPreviousPage}, totalCount, edges{ cursor, node {  name, description, url, homepageUrl } } } } }"}';
         query = query.replace("$login", this.props.login || "jtmorrisbytes")
         query = query.replace("$itemsPerPage", String(this.state.itemsPerPage))
         if ( this.state.cursor || (cursor.length > 0 && !cursor === "undefined") ) {
@@ -214,9 +216,11 @@ class Projects extends React.Component {
                     (repository) =>{
                         // console.log("REPOSITORY",repository)
                         return <ProjectCard 
-                                name={repository.node.name}
+                                displayName={repository.node.name.replace(/-/g," ")}
+                                name= {repository.node.name}
                                 login={this.props.login}
                                 sourceUrl={repository.node.url} key={repository.node.name}
+                                liveUrl = {repository.node.homepageUrl}
                                 description={repository.node.description}
                                 token={this.props.accessToken}
                         />

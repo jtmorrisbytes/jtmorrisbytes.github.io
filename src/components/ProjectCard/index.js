@@ -26,14 +26,14 @@ const ProjectCard = (props) => {
     const defaultLiveUrl = "#";
     const defaultSourceUrl = "https://www.github.com/jtmorrisbytes/";
     return <Card className="project-card">
-        <h2 className="project-name">{props.name || defaultProjectName}</h2>
+        <h2 className="project-name">{props.displayName || props.name || defaultProjectName}</h2>
         <img className="project-photo"
-             src={props.photoUrl || defaultProjectPhotoUrl}
+             src={`https://github.com/${props.login}/${props.name}/blob/master/preview.gif?raw=true` || defaultProjectPhotoUrl}
              alt={props.photoAlt || defaultProjectPhotoAltText} />
         <p>{props.description}</p>
         <div className="source-links">
             <Button url={props.liveUrl}>Live View</Button>
-            <Button url={props.sourceUrl}>View Source</Button>
+            <Button url={`https://www.github.com/${props.login}/${props.name}`}>View Source</Button>
         </div>
     </Card>
 }
