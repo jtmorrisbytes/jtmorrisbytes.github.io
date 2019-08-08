@@ -9,38 +9,37 @@ import superagent from "superagent"
 
 
 
-
-
-
-
-// const Projects = (props) => {
-//     // TODO: Add data source for all projects
-//     window.projectContext = this;
-//     const githubAccessToken = "bfc90dc0860aca9063a8670dfb4bbcb68bb73dfd"
-//     const numProjectsPerPage = 6;
-//     let currentPage = 1
-//     let repositories = null;
-//     const apiUrl = "https://api.github.com/graphql"
-//     const githubLogin = "jtmorrisbytes"
-//     let githubApiAvailable =false;
-//     let authenticationSucceded = false;
-//     let loadingRepositories = false;
-//     let schema = null;
-
-//     // const githubApiHttp = new HttpLink({uri:apiUrl})
-//     // console.log("HTTPLINK", githubApiHttp)
-//     // const link = setContext((request, previousContext) => ({
-//     //     headers: {
-//     //       'Authorization': `Bearer ${githubAccessToken}`,
-//     //     }
-//     //   })).concat(githubApiHttp);
-   
-
-
-
-
+const PaginationControls = ( props ) => {
+    const noOp = () => {console.log("this element does nothing")}
+    let style = {
+        button : {
+            enabled: {
+                cursor: "pointer"
+            },
+            disabled :{
+                cursor: "not-allowed",
+                visibility:"hidden"
+            }
+        }
+    }
+    return (
+        <div style={{display:"flex", justifyContent:"space-between"}} id='pagination-controls'>
+            <button style={(props.hasPreviousPage && !props.loading) ? style.button.enabled : style.button.disabled} type="button" onMouseUp={props.previousPageAction || noOp}> &lt; </button>
+            <div style={{display:"inline-flex"}}id='items-per-page-controls'>
+            <button style={(props.decreaseItemsPerPageAction && props.canDecreaseItemsPerPage) ? style.button.enabled: style.button.disabled}
+                    type='button' onMouseUp={props.decreaseItemsPerPageAction || noOp}><label>-</label></button>
+                <label style={{fontSize:"1rem",display:"inline",marginLeft:"0.25em",marginRight:"0.25em", textAlign:"center",paddingTop:"0.25em"}}id='num-items-per-page'>Items Per Page : {props.itemsPerPage || "?"}</label>
+                <button style={(props.increaseItemsPerPageAction && props.canIncreaseItemsPerPage) ? style.button.enabled: style.button.disabled}
+                    type='button' onMouseUp={props.increaseItemsPerPageAction || noOp}><label>+</label></button>
+            </div>
+            <button style={(props.hasNextPage && !props.loading) ? style.button.enabled: style.button.disabled} type="button" onMouseUp={props.nextPageAction || noOp}> &gt;</button>
+        </div>
+    );
+}
 
 class Projects extends React.Component {
+    minItemsPerPage = 2
+    maxItemsPerPage = 8
 
     state = {
         repositories:null,
@@ -61,6 +60,28 @@ class Projects extends React.Component {
     _endLoading() {
         this.setState({...this.state,loading:false})
     }
+    _increaseItemsPerPage() {
+        if (this.state.itemsPerPage > this.maxItemsPerPage || this.state.itemsPerPage > (Number.MAX_SAFE_INTEGER - 1)){
+            console.error("NumItemsPerPage too high, resetting")
+            this.setState(
+                {...this.state, cursor:null,itemsPerPage:(this.maxItemsPerPage < Number.MAX_SAFE_INTEGER - 1 ? this.maxItemsPerPage : (Number.MAX_SAFE_INTEGER -1) )}, this._fetchRepositories)
+                return
+        }
+        else if (this.state.itemsPerPage < this.maxItemsPerPage && this.state.itemsPerPage < Number.MAX_SAFE_INTEGER) {
+            this.setState({...this.state, cursor:null,itemsPerPage: (this.state.itemsPerPage * 2)}, this._fetchRepositories.bind(this))
+        }
+    }
+    _decreaseItemsPerPage() {
+        if (this.state.itemsPerPage < this.minItemsPerPage) { 
+            this.setState({...this.state, cursor:null, itemsPerPage:this.minItemsPerPage}, this._fetchRepositories.bind(this))
+            return
+            }
+
+
+        else if (this.state.itemsPerPage > 0 && (this.state.itemsPerPage >= this.minItemsPerPage)) {
+            this.setState({...this.state, cursor:null, itemsPerPage: (this.state.itemsPerPage / 2)}, this._fetchRepositories.bind(this))
+        }
+    }
     _nextPage() {
         // this.state.endCursor && ((this.state.previousCursor.length * this.state.itemsPerPage) < this.state.repositories.totalCount )
         if ( this.state.endCursor && this.state.hasNextPage) {
@@ -68,9 +89,8 @@ class Projects extends React.Component {
             this.setState({...this.state, 
                 previousCursor: this.state.previousCursor,
                 cursor:this.state.endCursor,
-                shouldFetchRepositories:true,
                 loading:true
-            })
+            },this._fetchRepositories.bind(this))
            
             // this._fetchRepositories()
         }
@@ -87,7 +107,7 @@ class Projects extends React.Component {
             if (newStack.length === 0) {
                 newCursor = null;
             }
-            this.setState({...this.state, previousCursor:newStack, cursor:newCursor, shouldFetchRepositories:true,loading:true})
+            this.setState({...this.state, previousCursor:newStack, cursor:newCursor,loading:true},this._fetchRepositories.bind(this))
             // this._fetchRepositories()
         }
         else {
@@ -95,16 +115,20 @@ class Projects extends React.Component {
         }
     }
     _fetchRepositories(cursor = "") {
-        this.setState({loading:true});
+        //Set the loading state to let users know that an operation is in progress
+        this.setState({...this.setState,loading:true});
+        //build the query from a querystring
         let query = '{"query": "query { user(login: $login ){ repositories(first:$itemsPerPage, $cursor privacy:PUBLIC) { pageInfo{ startCursor,endCursor,hasNextPage,hasPreviousPage}, totalCount, edges{ cursor, node {  name, description, url } } } } }"}';
         query = query.replace("$login", this.props.login || "jtmorrisbytes")
         query = query.replace("$itemsPerPage", String(this.state.itemsPerPage))
-        if ( this.state.cursor ) {
+        if ( this.state.cursor || (cursor.length > 0 && !cursor === "undefined") ) {
             query = query.replace("$cursor", ('after:\\"'+this.state.cursor + '\\",'))
         }
         else  {
             query = query.replace("$cursor", "")
         }
+
+        //the query has been built, turn the querystring into a hash for storage into localstorage
 
 
 
@@ -119,13 +143,14 @@ class Projects extends React.Component {
         .then(
         response => {
             // console.log("data: ", response.body )
-            if(response.body.data) {
-                this.setState({repositories :response.body.data.user.repositories,
-                    hasNextPage:response.body.data.user.repositories.pageInfo.hasNextPage,
-                    hasPreviousPage:response.body.data.user.repositories.pageInfo.hasPreviousPage,
-                    cursor: response.body.data.user.repositories.edges[0].cursor,
-                    startCursor: response.body.data.user.repositories.pageInfo.startCursor,
-                    endCursor: response.body.data.user.repositories.pageInfo.endCursor,
+            let repositories = ((((response || {}).body || {}).data || {}).user || {}).repositories
+            if(repositories) {
+                this.setState({repositories :repositories,
+                    hasNextPage:repositories.pageInfo.hasNextPage,
+                    hasPreviousPage:(repositories.pageInfo.hasPreviousPage && repositories.totalCount > this.state.itemsPerPage) || false,
+                    // cursor: repositories.edges[0].cursor,
+                    startCursor: repositories.pageInfo.startCursor,
+                    endCursor: repositories.pageInfo.endCursor,
                     
                     loading:false})
                 return true;
@@ -141,44 +166,46 @@ class Projects extends React.Component {
             
             
             },
-        error =>console.error(error)
+        error => {console.error("PROMISE REJECTION",error)}
         )
     }
     componentDidMount() {
         window.Projects = this;
+        // set event listeners to ensure that you are online
+
         // initialize repository data
-        this.setState({...this.state, shouldFetchRepositories: true})
-        // this._fetchRepositories()
+        this.setState({...this.state,loading:true}, this._fetchRepositories)
         
 
             
     }
     componentDidUpdate() {
-        if (this.state.shouldFetchRepositories) {
-            this._fetchRepositories()
-            this.setState({...this.state, shouldFetchRepositories:false})
-        }
+        // if (this.state.shouldFetchRepositories) {
+        //     this._fetchRepositories()
+        //     this.setState({...this.state, shouldFetchRepositories:false})
+        // }
     }
 
     render () {
     // if (this.state.repositories) console.log(this.state.repositories.edges) ;
-    let projects = [];
     if (this.state.loading){
         return <h2>Loading Projects... Please wait</h2>
     }
     // console.log(projects)
     return (<Card id="Projects">
             <h2 id="header">My Projects</h2>
-            <div id='pagination-controls'>
-            {this.state.hasPreviousPage && !this.state.loading ? 
-                    <button type="button" onMouseUp={this._previousPage.bind(this)}> Previous </button>:
-                    <button type="button" disabled> Previous</button>
-                }
-                {this.state.hasNextPage && !this.state.loading ? 
-                    <button type="button" onMouseUp={this._nextPage.bind(this)}> next</button>:
-                    <button type="button" disabled> next</button>
-                }
-            </div>
+            <PaginationControls 
+                hasNextPage= {this.state.hasNextPage}
+                hasPreviousPage = {this.state.hasPreviousPage}
+                itemsPerPage= { this.state.itemsPerPage}
+                previousPageAction = {this._previousPage.bind(this)} 
+                nextPageAction={this._nextPage.bind(this)}
+                increaseItemsPerPageAction = {this._increaseItemsPerPage.bind(this)}
+                canIncreaseItemsPerPage = {this.state.itemsPerPage < this.maxItemsPerPage}
+                decreaseItemsPerPageAction = {this._decreaseItemsPerPage.bind(this)}
+                canDecreaseItemsPerPage = {this.state.itemsPerPage > this.minItemsPerPage}
+                setState = {this.setState.bind(this)}
+                loading={this.state.loading} />
             <div id="projects-grid">
                 {/* <CodePenEmbedded hash={"qvQqwb"} user={"jtmorrisbytes"} /> */}
                 {/* I am placing a few default project cards here until layout is finalized*/}
@@ -197,6 +224,15 @@ class Projects extends React.Component {
                  }
 
             </div>
+            <PaginationControls 
+                hasNextPage= {this.state.hasNextPage}
+                hasPreviousPage = {this.state.hasPreviousPage}
+                itemsPerPage= { this.state.itemsPerPage}
+                previousPageAction = {this._previousPage.bind(this)} 
+                nextPageAction={this._nextPage.bind(this)}
+                setState = {this.setState.bind(this)}
+                loading={this.state.loading} />
+            
     </Card>)
     }
 }
