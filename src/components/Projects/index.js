@@ -120,10 +120,10 @@ class Projects extends React.Component {
         //Set the loading state to let users know that an operation is in progress
         this.setState({...this.setState,loading:true});
         //build the query from a querystring
-        let query = '{"query": "query { user(login: $login ){ repositories(first:$itemsPerPage, $cursor privacy:PUBLIC) { pageInfo{ startCursor,endCursor,hasNextPage,hasPreviousPage}, totalCount, edges{ cursor, node {  name, description, url, homepageUrl } } } } }"}';
+        let query = `{"query": "query { user(login: $login ){ repositories(first:$itemsPerPage, $cursor privacy:PUBLIC) { pageInfo{ startCursor,endCursor,hasNextPage,hasPreviousPage}, totalCount, edges{ cursor, node {  name, description, url, homepageUrl } } } } }"}`;
         query = query.replace("$login", this.props.login || "jtmorrisbytes")
         query = query.replace("$itemsPerPage", String(this.state.itemsPerPage))
-        if ( this.state.cursor || (cursor.length > 0 && !cursor) ) {
+        if ( this.state.cursor || (cursor.length > 0 && cursor !== "undefined") ) {
             query = query.replace("$cursor", ('after:\\"'+this.state.cursor + '\\",'))
         }
         else  {
@@ -170,9 +170,9 @@ class Projects extends React.Component {
             },
         error => {console.error("PROMISE REJECTION",error)}
         )
+    .catch(console.error)
     }
     componentDidMount() {
-        window.Projects = this;
         // set event listeners to ensure that you are online
 
         // initialize repository data
@@ -188,7 +188,7 @@ class Projects extends React.Component {
         // }
     }
 
-    render () {
+    render() {
     // if (this.state.repositories) console.log(this.state.repositories.edges) ;
     if (this.state.loading){
         return <h2>Loading Projects... Please wait</h2>
