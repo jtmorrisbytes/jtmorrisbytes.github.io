@@ -11,7 +11,7 @@ function App() {
     <div className="App">
     <Nav />
     <About />
-    <Projects apiUrl={"https://api.github.com/graphql"} login="jtmorrisbytes" accessToken={"bfc90dc0860aca9063a8670dfb4bbcb68bb73dfd"}/>
+    <Projects apiUrl={"https://api.github.com/graphql"} login="jtmorrisbytes" accessToken={"b7aa04e9bdafd2c39839da5be96531708da9c3a3"}/>
     <Contact />
     <Footer />
     
