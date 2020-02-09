@@ -176,6 +176,7 @@ class Projects extends React.Component {
         // set event listeners to ensure that you are online
 
         // initialize repository data
+        window.Projects = this;
         this.setState({...this.state,loading:true}, this._fetchRepositories)
         
 

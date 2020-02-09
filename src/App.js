@@ -7,11 +7,12 @@ import Projects from "./components/Projects"
 import './App.css';
 
 function App() {
+  let accessToken = document.getElementById('root').getAttribute('data-github-token') || "NO_GITHUB_TOKEN_FOUND"
   return (
     <div className="App">
     <Nav />
     <About />
-    <Projects apiUrl={"https://api.github.com/graphql"} login="jtmorrisbytes" accessToken={"b7aa04e9bdafd2c39839da5be96531708da9c3a3"}/>
+    <Projects apiUrl={"https://api.github.com/graphql"} login="jtmorrisbytes" accessToken={accessToken}/>
     <Contact />
     <Footer />
     
