@@ -26,6 +26,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -b master -d build",
     "start": "react-scripts start",
+    "startServer":"npm run build && node index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -49,5 +50,8 @@
     "chromedriver": "^74.0.0",
     "geckodriver": "^1.19.1",
     "nightwatch": "^1.1.11"
+  },
+  "engines": {
+    "node":"13.x"
   }
 }
