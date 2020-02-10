@@ -121,7 +121,7 @@ class Projects extends React.Component {
         this.setState({...this.setState,loading:true});
         //build the query from a querystring
         let query = `{"query": "query { user(login: $login ){ repositories(first:$itemsPerPage, $cursor privacy:PUBLIC) { pageInfo{ startCursor,endCursor,hasNextPage,hasPreviousPage}, totalCount, edges{ cursor, node {  name, description, url, homepageUrl } } } } }"}`;
-        query = query.replace("$login", this.props.login || "jtmorrisbytes")
+        query = query.replace("$login", `\\"${this.props.login}\\"` || '\\"jtmorrisbytes\\"')
         query = query.replace("$itemsPerPage", String(this.state.itemsPerPage))
         if ( this.state.cursor || (cursor.length > 0 && cursor !== "undefined") ) {
             query = query.replace("$cursor", ('after:\\"'+this.state.cursor + '\\",'))
