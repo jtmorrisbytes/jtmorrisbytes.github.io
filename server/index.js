@@ -6,7 +6,14 @@ const fs = require('fs')
 const server = express()
 
 const PORT = Number(process.env.PORT) || 3000
-const HOST = process.env.HOST || "localhost"
+let HOST;
+if(process.env.NODE_ENV === 'production'){
+    HOST = process.env.HOST || "0.0.0.0"
+}
+else {
+    HOST = process.env.HOST || "localhost"
+}
+
 
 const ROOT = path.join(__dirname, "..")
 const HTML_ROOT = path.join(ROOT,'build')
