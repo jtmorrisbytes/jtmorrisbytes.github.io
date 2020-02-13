@@ -63,8 +63,16 @@
 }
 
 /* Tablet 768 px */
+@media screen and (min-width:768px) {
+    html{font-size: 112%;}
+}
 
-
+/* Laptop 1024px */ 
+@media screen and (min-width:1024px){
+    html {
+        font-size: 115.625%;
+    }
+}
 
 /* UHD 1440p */
 @media screen and (min-width: 1440px) {
@@ -82,8 +90,12 @@
       font-size: 127.65625%;
     }
 }
+/* 
+   enabling this with an attribute selector allows us to toggle
+   it on and off;
 
-html {
+*/
+html[responsive-font] {
     /* 
         If calc is supported, apply a dynamic font size calculation
         equal to 100% plus 1/4th of the viewport width.
