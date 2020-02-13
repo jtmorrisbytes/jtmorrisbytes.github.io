@@ -18,22 +18,7 @@
 
 
 /* default font size */
-html {
-    /* default font size in best browser support order */
-    font-size: 100%;
-    /* font-size: 1em;
-    font-size: 1rem; */
-    /* 
-        If calc is supported, apply a dynamic font size calculation
-        equal to 100% plus 1/4th of the viewport width.
-        
-        In the context below, 100% refers to 100% of the current font size,
-        while 'vw' referres to percentage of viewport width
 
-    */
-        font-size: calc(100% + 0.25vw);
-      
-}
 /* according to the dynamic font formula above, 
     the max font size at this width should be:
     100% + 1/8 * (breakpoint size) or
@@ -41,8 +26,32 @@ html {
 
 */
 
-/* SD 480p */
+/* Small Mobile 320px */
+@media screen and (min-width:320px) {
+    html {
+        font-size: 105%;
+    }
+}
+/* Medium Mobile 375px */ 
+@media screen and (min-width:375){
+    html {
+        font-size: 105.859%;
+    }
+}
+/* Large Mobile 425px */
+@media screen and (min-width:425px) {
+    html {
+        font-size: 106.641% ;
+    }
+}
 
+
+/* SD 480p */
+@media screen and (min-width: 480px) {
+    html {
+        font-size: 107.5%;
+    }
+}
 
 
 /* HD 720p */
@@ -52,6 +61,11 @@ html {
     }
     
 }
+
+/* Tablet 768 px */
+
+
+
 /* UHD 1440p */
 @media screen and (min-width: 1440px) {
     html{ font-size: 122.5%;}
@@ -67,4 +81,21 @@ html {
     html {
       font-size: 127.65625%;
     }
+}
+
+html {
+    /* 
+        If calc is supported, apply a dynamic font size calculation
+        equal to 100% plus 1/4th of the viewport width.
+        
+        In the context below, 100% refers to 100% of the current font size,
+        while 'vw' referres to percentage of viewport width
+
+        This Entry is placed last purposely, to override the polyfill code
+        in case the browser does support calc. if calc is not supported, then
+        the current entry is ignored;
+
+    */
+        font-size: calc(100% + 0.25vw);
+      
 }
