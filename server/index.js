@@ -1,7 +1,7 @@
 require("dotenv").config()
 const express = require('express')
 const path = require('path')
-const JSDOM = require('jsdom').JSDOM
+// const JSDOM = require('jsdom').JSDOM
 const fs = require('fs')
 const server = express()
 
