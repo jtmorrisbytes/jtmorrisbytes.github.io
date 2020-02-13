@@ -4,7 +4,8 @@
 @import url("./assets/fonts/TenbyFive/TenbyFive.css");
 /* @import url("./assets/fonts/TenbyFourLight/TenbyFourLight.css"); */
 @import url("./brand-colors.css");
-@import url("./font.css");
+/* global font settings */
+@import url("./responsive-font_25-percent.css");
 
 
 
