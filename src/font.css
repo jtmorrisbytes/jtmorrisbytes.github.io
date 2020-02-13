@@ -4,15 +4,28 @@
  global app font settings,
  including dynamic font styles
 */
+
+/* 
+    Because calc is not supported in all browsers or some older versions, 
+    polyfill code is required to ensure that the effect works correctly.
+    Without CSS calc, dynamic fonts wont be able to work without generating
+    polyfill css or using a js based polyfill. The best effort scenario
+    would be to pick the most common device sizes and calculate the formula
+    manually using css, or a sass/scss/less mixin.
+
+*/
+
+
+
 /* default font size */
 html {
     /* default font size in best browser support order */
     font-size: 100%;
-    font-size: 1em;
-    font-size: 1rem;
+    /* font-size: 1em;
+    font-size: 1rem; */
     /* 
         If calc is supported, apply a dynamic font size calculation
-        equal to 100% plus 1/8th or 1/4th of the viewport width.
+        equal to 100% plus 1/4th of the viewport width.
         
         In the context below, 100% refers to 100% of the current font size,
         while 'vw' referres to percentage of viewport width
@@ -21,26 +34,37 @@ html {
         font-size: calc(100% + 0.25vw);
       
 }
-
-/* 
-    Because calc is not supported in all browsers or some older versions, 
-    polyfill code is required to ensure
+/* according to the dynamic font formula above, 
+    the max font size at this width should be:
+    100% + 1/8 * (breakpoint size) or
+    1em + 1/8 * ((breakpoint size)) / 100
 
 */
 
+/* SD 480p */
+
+
+
 /* HD 720p */
-
-
+@media screen and (min-width: 720px) {
+    html {
+        font-size: 111.25% ;
+    }
+    
+}
+/* UHD 1440p */
+@media screen and (min-width: 1440px) {
+    html{ font-size: 122.5%;}
+}
+/* QHD 1080p */
+@media screen and (min-width:1920px){
+    html { font-size: 126.25% ;}
+}
 
 /* maximum supported display size: 4k (2160px) */
 @media screen and (min-width:2160px){
-    /* according to the dynamic font formula above, 
-      the max font size at this width should be:
-      100% + 1/8 * (breakpoint size) or
-      1em + 1/8 * ((breakpoint size)) / 100
-    
-    */
+
     html {
-      font-size: 370%;
+      font-size: 127.65625%;
     }
 }
