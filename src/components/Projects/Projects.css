@@ -1,3 +1,13 @@
+/* 
+ new idea: the parent component
+ is responsible for laying out its children
+ so the children don't neccessarily have to 
+ care about the parent, just their children.
+
+
+*/
+
+
 div#Projects {
     /* margin-top:0.25em; */
     /* margin-bottom:0.25em; */
@@ -6,19 +16,35 @@ div#Projects {
      
 
 }
-div#Projects > h2 {
+div#Projects > .header {
     text-align: center;
 }
 
 
-div#Projects > div#projects-grid {
+div#Projects > .container {
     /* The projects should start with a default of one column */
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-auto-flow: row;
-    grid-gap: 0.25em;
-    max-width: 100%
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* max-width: 100% */
+    /* on mobile, start with a padding
+       of 0.5 * font size
+    */
+    /* padding: 0.125em; */
 }
+div#Projects > div.container > div.project-card {
+    /* start at a width of 200px */
+    flex-basis: 25%;
+    /* grow as needed */
+    flex-grow: 1;
+    /* flex-shrink: 0; */
+    /* with a maximum width of 500px */
+    /* max-width: 250px; */
+
+    margin:0.25em;
+    
+}   
+
 /*
     There is more room on mobile phones in landscape mode.
     lets program the grid to take advantage of the extra space
@@ -45,7 +71,6 @@ div#Projects > div#projects-grid {
 /* this media query targets 425px in EMs */
 @media  (min-width: 26.5625em) {
     div#Projects div#projects-grid {
-        grid-template-columns: 1fr 1fr;
     }
 }
 /* this media query targets 768px in EMs */
@@ -60,14 +85,10 @@ div#Projects > div#projects-grid {
 }
 /* this media query targets 1440px in EMs */
 @media  (min-width: 90em) {
-    div#Projects div#projects-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
+
 }
 @media  (min-width: 160em) {
-    div#Projects div#projects-grid {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
+
 }
 /* @media  (orientation:landscape) and (min-width:72em) {
     div#Projects div#projects-grid {
@@ -84,8 +105,4 @@ div#Projects > div#projects-grid {
     find the breakpoint for 1440px
 */
 @media  (min-width: 160em) {
-    div#Projects div#projects-grid {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-
-    }
 }
