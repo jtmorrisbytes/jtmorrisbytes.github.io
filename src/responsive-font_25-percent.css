@@ -34,13 +34,13 @@
 }
 /* Medium Mobile 375px */ 
 @media screen and (min-width:375){
-    html {
+    html[responsive-font] {
         font-size: 105.859%;
     }
 }
 /* Large Mobile 425px */
 @media screen and (min-width:425px) {
-    html {
+    html[responsive-font] {
         font-size: 106.641% ;
     }
 }
@@ -48,7 +48,7 @@
 
 /* SD 480p */
 @media screen and (min-width: 480px) {
-    html {
+    html[responsive-font] {
         font-size: 107.5%;
     }
 }
@@ -56,7 +56,7 @@
 
 /* HD 720p */
 @media screen and (min-width: 720px) {
-    html {
+    html[responsive-font] {
         font-size: 111.25% ;
     }
     
@@ -64,29 +64,29 @@
 
 /* Tablet 768 px */
 @media screen and (min-width:768px) {
-    html{font-size: 112%;}
+    html[responsive-font]{font-size: 112%;}
 }
 
 /* Laptop 1024px */ 
 @media screen and (min-width:1024px){
-    html {
+    html[responsive-font] {
         font-size: 115.625%;
     }
 }
 
 /* UHD 1440p */
 @media screen and (min-width: 1440px) {
-    html{ font-size: 122.5%;}
+    html[responsive-font]{ font-size: 122.5%;}
 }
 /* QHD 1080p */
 @media screen and (min-width:1920px){
-    html { font-size: 126.25% ;}
+    html[responsive-font] { font-size: 126.25% ;}
 }
 
 /* maximum supported display size: 4k (2160px) */
 @media screen and (min-width:2160px){
 
-    html {
+    html[responsive-font] {
       font-size: 127.65625%;
     }
 }
