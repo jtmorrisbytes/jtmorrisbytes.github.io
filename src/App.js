@@ -10,6 +10,7 @@ import Routes from "./routes";
 import { HashRouter } from "react-router-dom";
 
 import "./App.css";
+import Banner from "./components/Banner";
 
 function App() {
   let accessToken =
@@ -18,6 +19,7 @@ function App() {
   return (
     <div className="App">
       <Nav />
+      <Banner />
       <HashRouter>
         <Routes />
       </HashRouter>
