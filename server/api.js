@@ -5,6 +5,9 @@ const path = require("path");
 const api = express.Router();
 const mountPath = "/api";
 
+// setup json parser
+api.use(express.json());
+
 // since webpack is not being used
 // we can just read the "controllers"
 // directory and dynamically require() subrouters

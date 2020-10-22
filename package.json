@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@octokit/rest": "^18.0.6",
     "@types/prop-types": "^15.7.1",
     "@types/selenium-webdriver": "^4.0.0",
     "apollo-boost": "^0.4.7",
