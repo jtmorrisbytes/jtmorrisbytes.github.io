@@ -9,9 +9,8 @@ export default function Routes(props) {
   return (
     <>
       <Switch>
-        <Route path="/" exact>
-          hello from splash page
-        </Route>
+        <Route path="/admin" exact />
+        hello from splash page
         <Route path="/about" component={About} />
         <Route path="/projects" component={Projects} />
         <Route path="/contact" component={Contact} />
