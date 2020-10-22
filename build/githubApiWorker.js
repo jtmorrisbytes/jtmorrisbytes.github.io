@@ -73,7 +73,7 @@ onmessage= function(MessageEvent){
     
 }
 function validateToken(token="") {
-    if(!token && token.length == 0 ){
+    if(!token || token.length == 0 ){
         console.error("Error: Invalid token supplied to fetchRepositories")
         return false
     }
