@@ -36,10 +36,38 @@ admin.get("/", function getInitialData(req, res) {
 });
 
 // get a list of projects, provided by github
-const githubClient = new require("@ocktokit/rest").Ocktokit({
+
+const { Octokit } = require("@octokit/rest");
+
+const githubClient = new Octokit({
   auth: GITHUB_AUTH_TOKEN,
   userAgent: "jtmorrisbytes-admin-panel",
 });
-admin.get("/projects", function getGithubProjects(req, res) {});
+admin.get("/github/projects", function getGithubProjects(req, res) {
+  githubClient.request("GET /user/repos").then((r) => {
+    console.log(r.data);
+    res.json(r);
+  });
+});
+
+admin.get("/github/project/:name", function getGithubProjectById(req, res) {
+  console.log("get github project by id");
+  githubClient.users
+    .getAuthenticated()
+    .then((authenticatedUserResponse) => {
+      const { login } = authenticatedUserResponse.data;
+      return githubClient.repos
+        .get({ owner: login, repo: req.params.name })
+        .then((repo) => {
+          console.log(repo.data);
+          res.json(repo.data);
+        });
+    })
+    .catch((e) => {
+      res
+        .status(e.status)
+        .json({ name: e.name, status: e.status, request: e.request });
+    });
+});
 
 module.exports = { path: "/admin", router: admin };
