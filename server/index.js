@@ -29,6 +29,15 @@ if (NODE_ENV === "production") {
   });
 }
 
-server.listen(SERVER_PORT, SERVER_HOST, () => {
-  console.log(`listenting on ${SERVER_HOST}:${SERVER_PORT}`);
+// setup the database, then start the server
+const massive = require("massive");
+massive({
+  connectionString: DATABASE_URL,
+  ssl: { rejectUnauthorized: NODE_ENV === "production" },
+}).then((db) => {
+  // create a reference to the database instance inside server
+  server.set("db", db);
+  server.listen(SERVER_PORT, SERVER_HOST, () => {
+    console.log(`listenting on ${SERVER_HOST}:${SERVER_PORT}`);
+  });
 });

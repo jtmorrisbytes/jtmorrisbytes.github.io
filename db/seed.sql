@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS projects (
     project_id SERIAL PRIMARY KEY,
     title VARCHAR(25),
     blog_post text,
-    hosted_link text,
+    hosted_link text
 );
 
 

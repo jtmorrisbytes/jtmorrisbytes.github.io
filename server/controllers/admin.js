@@ -18,7 +18,7 @@ if (GITHUB_AUTH_TOKEN == null) {
 // if no match, client is unauthorized
 // ACID = ADMIN_CLIENT_ID
 admin.use((req, res, next) => {
-  if (req.body.ACID === ADMIN_CLIENT_ID) {
+  if (req.header("X-ACID") === ADMIN_CLIENT_ID) {
     next();
   } else {
     res.status(401).json("ACID MISMATCH");
