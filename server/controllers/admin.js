@@ -45,8 +45,7 @@ const githubClient = new Octokit({
 });
 admin.get("/github/projects", function getGithubProjects(req, res) {
   githubClient.request("GET /user/repos").then((r) => {
-    console.log(r.data);
-    res.json(r);
+    res.json(r.data);
   });
 });
 

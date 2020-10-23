@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import Axios from "axios"
+import client from "../../customAxios";
 
-const client = Axios.create({})
+import LocalProjects from "./Local";
+import GithubProjects from "./Github";
+import { Route } from "react-router-dom";
 
-export default function Projects(props)
+export default function Projects(props) {
+  const { localProjects, updateLocalProjects } = useState(null);
+
+  return (
+    <div>
+      <button>add project</button>
+    </div>
+  );
+}
