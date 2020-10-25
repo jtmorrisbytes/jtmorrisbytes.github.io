@@ -55,7 +55,7 @@ onmessage= function(MessageEvent){
         this.postMessage(missingRequestDataResponse)
         return;
     }
-    else if(!(data.__proto__.constructor === {}.__proto__.constructor)){
+    else if(!Array.isArray(data) && typeof data === 'object'){
         console.error("TypeError: MessageEvent.data is required to be an object")
         this.postMessage(Object.assign(invalidRequestDataTypeResponse,{expectedType:TYPES.Object}))
     }

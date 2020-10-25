@@ -230,48 +230,50 @@ class Projects extends React.Component {
       query = query.replace("$cursor", "");
     }
 
-    //the query has been built, turn the querystring into a hash for storage into localstorage
+    // NOTE FROM FUTURE JORDAN:
+    // this is being turned into a server-side process
 
-    return superagent
-      .post(this.props.apiUrl)
-      .set("authorization", `Bearer ${this.props.accessToken}`)
-      .set("content-type", "application/json")
-      .set("accept", "application/json")
-      .send(query)
-      .then(
-        (response) => {
-          // console.log("data: ", response.body )
-          let repositories = (
-            (((response || {}).body || {}).data || {}).user || {}
-          ).repositories;
-          if (repositories) {
-            this.setState({
-              repositories: repositories,
-              hasNextPage: repositories.pageInfo.hasNextPage,
-              hasPreviousPage:
-                (repositories.pageInfo.hasPreviousPage &&
-                  repositories.totalCount > this.state.itemsPerPage) ||
-                false,
-              // cursor: repositories.edges[0].cursor,
-              startCursor: repositories.pageInfo.startCursor,
-              endCursor: repositories.pageInfo.endCursor,
+    // return superagent
+    //   .post(this.props.apiUrl)
+    //   .set("authorization", `Bearer ${this.props.accessToken}`)
+    //   .set("content-type", "application/json")
+    //   .set("accept", "application/json")
+    //   .send(query)
+    //   .then(
+    //     (response) => {
+    //       // console.log("data: ", response.body )
+    //       let repositories = (
+    //         (((response || {}).body || {}).data || {}).user || {}
+    //       ).repositories;
+    //       if (repositories) {
+    //         this.setState({
+    //           repositories: repositories,
+    //           hasNextPage: repositories.pageInfo.hasNextPage,
+    //           hasPreviousPage:
+    //             (repositories.pageInfo.hasPreviousPage &&
+    //               repositories.totalCount > this.state.itemsPerPage) ||
+    //             false,
+    //           // cursor: repositories.edges[0].cursor,
+    //           startCursor: repositories.pageInfo.startCursor,
+    //           endCursor: repositories.pageInfo.endCursor,
 
-              loading: false,
-            });
-            return true;
-          } else {
-            console.error("the project data was unavailable");
-            this.setState({ loading: false, error: true });
-          }
-          if (!response.body.errors) {
-            return response.body.data.user.repositories.edges;
-          } else return response.body.data;
-        },
-        (error) => {
-          console.error("PROMISE REJECTION", error);
-        }
-      )
-      .catch(console.error);
+    //           loading: false,
+    //         });
+    //         return true;
+    //       } else {
+    //         console.error("the project data was unavailable");
+    //         this.setState({ loading: false, error: true });
+    //       }
+    //       if (!response.body.errors) {
+    //         return response.body.data.user.repositories.edges;
+    //       } else return response.body.data;
+    //     },
+    //     (error) => {
+    //       console.error("PROMISE REJECTION", error);
+    //     }
+    //   )
+    //   .catch(console.error);
+    this.setState({ ...this.state, repositories: [], loading: false });
   }
   componentDidMount() {
     // set event listeners to ensure that you are online
