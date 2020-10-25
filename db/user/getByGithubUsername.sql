@@ -1,1 +1,0 @@
-SELECT * FROM users where github_username = $1

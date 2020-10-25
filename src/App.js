@@ -1,27 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import About from "./components/Banner";
 import Nav from "./components/Nav";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Projects from "./components/Projects";
 
-import Routes from "./routes";
+// import Routes from "./routes";
+import AdminRoutes from "./components/Admin/routes";
 
-import { HashRouter } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 
 import "./App.css";
 import Banner from "./components/Banner";
 
+import apiClient from "./lib/apiClient";
+
 function App() {
-  let accessToken =
-    document.getElementById("root").getAttribute("data-github-token") ||
-    "NO_GITHUB_TOKEN_FOUND";
+  // grab user info on launch
+  const [user, setUserView] = useState(null);
+  useEffect(() => {
+    // get the aggregated user data from the api server
+    apiClient
+      .get("/user")
+      .then(() => {})
+      .catch(console.error);
+  }, []);
+
   return (
     <div className="App">
-      <Nav />
-      <Banner />
       <HashRouter>
-        <Routes />
+        <Switch>
+          {/* display admin panel */}
+          <Route path="/admin" component={AdminRoutes} />
+          <Route>
+            <Nav />
+            <Banner />
+            <Projects />
+            <Contact />
+          </Route>
+        </Switch>
       </HashRouter>
     </div>
   );

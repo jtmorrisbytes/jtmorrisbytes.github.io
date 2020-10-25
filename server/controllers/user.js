@@ -18,12 +18,17 @@ user.get("/", (req, res) => {
   githubClient.users.getAuthenticated().then((response) => {
     return req.app
       .get("db")
-      .user.getByGithubUsername(response.data.login)
-      .then((user) => {
-        if (Array.isArray(user)) {
-          user = user[0];
+      .user.get(response.data.login)
+      .then((response) => {
+        if (response.length > 0) {
+          res.json(response[0]);
+        } else {
+          res.status(500).json({
+            message: "Server is not in a valid state to perform this request",
+            reason: "User has not been setup yet",
+            code: "E_RUN_USER_SETUP",
+          });
         }
-        throw new Error("IMPLEMENTATION NOT FINISHED");
       });
   });
 });

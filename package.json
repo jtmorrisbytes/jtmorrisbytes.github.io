@@ -2,6 +2,7 @@
   "name": "jtmorrisbytes.github.io",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000",
   "dependencies": {
     "@octokit/rest": "^18.0.6",
     "@types/prop-types": "^15.7.1",
