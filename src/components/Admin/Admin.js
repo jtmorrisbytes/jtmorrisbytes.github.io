@@ -6,29 +6,7 @@ import client from "./customAxios";
 const { REACT_APP_GITHUB_CLIENT_ID } = process.env;
 
 function Admin(props) {
-  let query = new URLSearchParams(
-    props.location.search || window.location.search
-  );
-  console.log(
-    "checking query and user",
-    `'${props.location.search}'`,
-    window.location.search,
-    query.get("code"),
-    props.user
-  );
-
-  if (props.user == null && query.has("code")) {
-    client
-      .post(`/admin/login/verify?code=${query.get("code")}`)
-      .then((response) => {
-        // should have the token or verify that it was successful
-        console.log("Verify success!");
-      })
-      .catch((e) => {
-        console.error("Verify Failed!", e);
-      });
-    return <div>Please Wait...</div>;
-  } else if (props.user == null) {
+  if (props.user == null) {
     return (
       <div>
         please log in...
