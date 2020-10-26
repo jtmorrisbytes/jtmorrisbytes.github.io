@@ -23,7 +23,9 @@ function App() {
     apiClient
       .get("/user")
       .then(() => {})
-      .catch(console.error);
+      .catch((e) => {
+        console.error("getUser failed in App", e);
+      });
   }, []);
 
   return (

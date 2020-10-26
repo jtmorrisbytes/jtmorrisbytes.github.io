@@ -2,7 +2,17 @@ const express = require("express");
 const { func } = require("prop-types");
 const admin = express.Router();
 
+const Axios = require("axios");
+
 const { ADMIN_CLIENT_ID, GITHUB_AUTH_TOKEN, HEROKU_AUTH_TOKEN } = process.env;
+
+const { Octokit } = require("@octokit/rest");
+
+const githubClient = new Octokit({
+  auth: GITHUB_AUTH_TOKEN,
+  userAgent: "jtmorrisbytes-admin-panel",
+});
+
 if (ADMIN_CLIENT_ID == null) {
   throw new TypeError(
     "process.env.ADMIN_CLIENT_ID must be provided to use this module"
@@ -29,20 +39,20 @@ admin.use((req, res, next) => {
 // to my github user account
 // which requires an auth token
 
-admin.get("/", function getInitialData(req, res) {
-  res.json({
-    GITHUB_AUTH_TOKEN,
-  });
+admin.get("/user", function getInitialData(req, res) {
+  if (req.user == null) {
+    res.sendStatus(401);
+  } else {
+    res.json(req.user);
+  }
+});
+
+admin.get("/login", (req, res) => {
+  res.redirect("https://github.com/login/oauth/authorize");
 });
 
 // get a list of projects, provided by github
 
-const { Octokit } = require("@octokit/rest");
-
-const githubClient = new Octokit({
-  auth: GITHUB_AUTH_TOKEN,
-  userAgent: "jtmorrisbytes-admin-panel",
-});
 admin.get("/github/projects", function getGithubProjects(req, res) {
   githubClient.request("GET /user/repos").then((r) => {
     res.json(r.data);

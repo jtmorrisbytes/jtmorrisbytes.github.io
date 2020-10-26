@@ -57,6 +57,7 @@ user.get("/", (req, res) => {
               message: "Server is not in a valid state to perform this request",
               reason: "User has not been setup yet",
               code: "E_RUN_USER_SETUP",
+              status: 503,
             });
           }
         });
@@ -71,7 +72,7 @@ user.get("/", (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(500).json(error);
+      res.status(error.status || 500).json(error);
     });
 });
 
