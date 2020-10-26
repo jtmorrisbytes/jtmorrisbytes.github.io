@@ -6,14 +6,34 @@ import client from "./customAxios";
 const { REACT_APP_GITHUB_CLIENT_ID } = process.env;
 
 function Admin(props) {
-  if (props.user == null) {
+  const [authUrl, setAuthUrl] = useState(null);
+  const [authState, setAuthState] = useState(null);
+  const [requestedScopes, setRequestedScopes] = useState(null);
+  useEffect(() => {
+    client
+      .get("/admin/login")
+      .then((response) => {
+        let { url, state, requestScopes } = response.data;
+        setAuthUrl(url);
+        setAuthState(state);
+        setRequestedScopes(requestScopes);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, []);
+
+  if (props.user == null && authUrl) {
     return (
       <div>
         please log in...
         <button
           onClick={() => {
             window.open(
-              `https://github.com/login/oauth/authorize?client_id=${REACT_APP_GITHUB_CLIENT_ID}`,
+              authUrl
+                .replace("${client_id}", REACT_APP_GITHUB_CLIENT_ID)
+                .replace("${state}", authState || ""),
               "_top"
             );
           }}
@@ -23,7 +43,7 @@ function Admin(props) {
       </div>
     );
   } else {
-    return <div>hello from admin... testing! {props.test}</div>;
+    return <div>Loading...</div>;
   }
 }
 export default connectUser(Admin);
