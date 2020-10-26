@@ -17,6 +17,7 @@ const {
 const { Octokit } = require("@octokit/rest");
 const ensureClientIdInQuery = require("../middleware/ensureClientIdInQuery");
 const ensureAccessTokenInQuery = require("../middleware/ensureAccessTokenInBody");
+const { stat } = require("fs");
 
 const githubClient = new Octokit({
   auth: GITHUB_AUTH_TOKEN,
@@ -50,10 +51,11 @@ admin.use((req, res, next) => {
 // which requires an auth token
 
 admin.get("/user", function getInitialData(req, res) {
-  if (req.user == null) {
+  const githubUser = req.app.get("admin.githubUser");
+  if (githubUser == null) {
     res.sendStatus(401);
   } else {
-    res.json(req.user);
+    res.json(githubUser);
   }
 });
 
@@ -69,10 +71,21 @@ admin.post(
   },
   ensureClientIdInQuery,
   (req, res) => {
-    const { client_id, code } = req.query;
+    const { client_id, code, state } = req.query;
+
+    if (state !== req.app.get("admin.authState")) {
+      res.status(403).json({
+        error: "E_AUTH_MISMATCH",
+        error_description: "auth state mismatch",
+      });
+      return;
+    }
+
     Axios({
       method: "post",
-      url: `https://github.com/login/oauth/access_token?client_id=${client_id}&code=${code}&client_secret=${GITHUB_CLIENT_SECRET}`,
+      url:
+        `https://github.com/login/oauth/access_token?client_id=${client_id}&code=${code}&client_secret=${GITHUB_CLIENT_SECRET}` +
+        (state ? `&state=${state}` : ""),
       headers: { Accept: "application/json" },
     })
       .then((response) => {
@@ -129,9 +142,10 @@ admin.post(
               });
               res.sendStatus(200);
             } else {
-              res
-                .status(403)
-                .json("You are not permitted to access this resource");
+              res.status(403).json({
+                error: "E_LOGIN_MISMATCH",
+                description: "You are not permitted to access this resource",
+              });
             }
             console.log(ATResponse.data);
           });

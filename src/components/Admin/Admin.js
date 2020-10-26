@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import { connectUser } from "./User/context";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import client from "./customAxios";
+
 const { REACT_APP_GITHUB_CLIENT_ID } = process.env;
 
 function Admin(props) {
@@ -23,8 +24,9 @@ function Admin(props) {
         console.error(e);
       });
   }, []);
-
-  if (props.user == null && authUrl) {
+  if (props.loading) {
+    return <div>app is initializing...</div>;
+  } else if (props.user == null && authUrl) {
     return (
       <div>
         please log in...
@@ -43,7 +45,10 @@ function Admin(props) {
       </div>
     );
   } else {
-    return <div>Loading...</div>;
+    return <div>{props.user.login}</div>;
   }
 }
-export default connectUser(Admin);
+
+export default connect((state) => {
+  return { user: state.user.data, loading: state.loading };
+}, {})(Admin);

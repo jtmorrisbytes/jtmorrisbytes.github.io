@@ -6,7 +6,6 @@ import Footer from "./components/Footer";
 import Projects from "./components/Projects";
 
 // import Routes from "./routes";
-import AdminRoutes from "./components/Admin/routes";
 
 import { HashRouter, Switch, Route } from "react-router-dom";
 
@@ -14,6 +13,7 @@ import "./App.css";
 import Banner from "./components/Banner";
 
 import apiClient from "./lib/apiClient";
+import AdminApp from "./components/Admin/";
 
 function App() {
   // grab user info on launch
@@ -33,7 +33,7 @@ function App() {
       <HashRouter>
         <Switch>
           {/* display admin panel */}
-          <Route path="/admin" component={AdminRoutes} />
+          <Route path="/admin" component={AdminApp} />
           <Route>
             <Nav />
             <Banner />

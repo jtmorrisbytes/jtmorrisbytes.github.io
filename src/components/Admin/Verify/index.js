@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import client from "../customAxios";
 import { Link, Redirect } from "react-router-dom";
+import { connectUser } from "../User/context";
 
 export const path = "/verify";
 
@@ -16,9 +17,10 @@ function Verify(props) {
     if (query.has("code")) {
       client
         .post(
-          `/admin/login/verify/access_code?client_id=${REACT_APP_GITHUB_CLIENT_ID}&code=${query.get(
-            "code"
-          )}`
+          `/admin/login/verify/access_code?client_id=${REACT_APP_GITHUB_CLIENT_ID}&code=${
+            query.get("code") +
+            (query.has("state") ? `&state=${query.get("state")}` : "")
+          }`
         )
         .then((response) => {
           console.log(response);
@@ -29,14 +31,21 @@ function Verify(props) {
           }
         })
         .then((data) => {
+          // verify the access token
           return client
             .post(
               `/admin/login/verify/access_token?client_id=${REACT_APP_GITHUB_CLIENT_ID}&token_type=${data.token_type}`,
               { access_token: data.access_token }
             )
             .then((response) => {
-              console.log(response);
+              return {
+                access_token: data.access_token,
+                token_type: data.token_type,
+              };
             });
+        })
+        .then((credentials) => {
+          setSuccess(true);
         })
         .catch((e) => {
           if (e?.response?.data?.error) {
@@ -48,17 +57,14 @@ function Verify(props) {
           }
         });
     }
-  }, []);
+  }, [query]);
 
-  useEffect(() => {
-    if (success?.access_token) {
-      console.log();
-    }
-  }, [success]);
-  if (error) {
-    return <Redirect to={"."} strict={true} />;
-  } else if (success) {
-    return <div>Verify Success {success.access_token}</div>;
+  // if (error) {
+  //   return <Redirect to={"."} strict={true} />;
+  // } else
+  if (success || error) {
+    window.location.href = `${window.location.origin}/#/admin`;
+    return null;
   } else if (query.has("code")) {
     return <div>please wait..</div>;
   } else {
