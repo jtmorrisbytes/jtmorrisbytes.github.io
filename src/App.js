@@ -14,6 +14,7 @@ import Banner from "./components/Banner";
 
 import apiClient from "./lib/apiClient";
 import AdminApp from "./components/Admin/";
+import Login from "./components/Admin/Login";
 
 function App() {
   // grab user info on launch
@@ -34,6 +35,7 @@ function App() {
         <Switch>
           {/* display admin panel */}
           <Route path="/admin" component={AdminApp} />
+          <Route path="/login" component={Login} />
           <Route>
             <Nav />
             <Banner />

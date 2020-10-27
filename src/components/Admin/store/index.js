@@ -2,8 +2,7 @@ import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import client from "../customAxios";
 
-import DBReducer from "./db";
-import users from "./users";
+import users, { initUsersAsync } from "./users";
 import github from "./github";
 
 import * as consts from "../constants";
@@ -30,23 +29,22 @@ function appInitError(error) {
   return { type: APP_INIT, payload: { loading: false, error } };
 }
 
-export function appInitAsync() {
+export function initAppAsync() {
   return (dispatch, getState) => {
     console.log("Initializing application");
     dispatch(appInitPending());
     console.log("getting initial data");
-    return Promise.all([dispatch(getGithubUserAsync())])
-      .then((results) => {
-        dispatch(appInit());
-      })
-      .catch((e) => {
-        dispatch(appInitError(e));
-      });
+    return Promise.all([
+      dispatch(getGithubUserAsync()),
+      dispatch(initUsersAsync()),
+    ]).then((results) => {
+      dispatch(appInit());
+      return Promise.resolve(results);
+    });
   };
 }
 
 function reducer(state = INITIAL_STATE, action) {
-  console.log("ADMIN_REDUCER", state, action);
   const { type, payload } = action;
   // block statements have been placed
   // around the executing body
@@ -62,7 +60,7 @@ function reducer(state = INITIAL_STATE, action) {
 }
 
 const store = createStore(
-  combineReducers({ app: reducer, users, github, db: DBReducer }),
+  combineReducers({ app: reducer, users, github }),
   applyMiddleware(thunk)
 );
 export default store;

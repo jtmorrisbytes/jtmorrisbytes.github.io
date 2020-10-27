@@ -1,5 +1,6 @@
 import * as consts from "../constants";
 import client from "../customAxios";
+import { batch } from "react-redux";
 
 const GET_GITHUB_USER = "GET_GITHUB_USER";
 const AUTH_FLOW = "AUTH_FLOW";
@@ -19,6 +20,7 @@ const INITIAL_STATE = {
   initialized: false,
   error: null,
   oAuthFlowStartUrl: GITHUB_OAUTH_FLOW_START,
+  state: "",
   requestedScopes: "",
   grantedScopes: "",
 };
@@ -79,9 +81,9 @@ export function getGithubUserAsync() {
   };
 }
 function authFlowStart(state) {
-  return { type: AUTH_FLOW, payload: { state: state || "" } };
+  return { type: AUTH_FLOW, payload: { state: state || "" }, loading: false };
 }
-function startAuthFlowAsync() {
+export function startAuthFlowAsync() {
   return (dispatch) => {
     return client.get(AUTH_LOGIN_URL).then((response) => {
       dispatch(authFlowStart(response?.data?.state));
@@ -95,10 +97,10 @@ function github(state = INITIAL_STATE, action) {
     case GET_GITHUB_USER: {
       var { loading, error, user } = payload;
       console.log("GET USER", loading, error, user);
-      return { ...state, user: { data: user || {}, loading, error } };
+      return { ...state, data: user || {}, loading, error };
     }
     case AUTH_FLOW:
-      return { ...state, auth: { ...state.auth, state: payload.state } };
+      return { ...state, state: payload.state };
     default:
       return state;
   }
