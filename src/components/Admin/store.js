@@ -17,6 +17,7 @@ const AUTH_VERIFY_TOKEN_URL = "/admin/login/verify/access_token";
 // reducer constants
 const APP_INIT = "APP_INIT";
 const GET_USER = "GET_USER";
+const AUTH_FLOW = "AUTH_FLOW";
 
 const INITIAL_STATE = {
   loading: true,
@@ -56,6 +57,19 @@ function userLoginRequried() {
     },
   };
 }
+
+function authFlowStart(state) {
+  return { type: AUTH_FLOW, payload: { state: state || "" } };
+}
+
+function startAuthFlowAsync() {
+  return (dispatch) => {
+    return client.get(AUTH_LOGIN_URL).then((response) => {
+      dispatch(authFlowStart(response?.data?.state));
+    });
+  };
+}
+
 function appInit() {
   return { type: APP_INIT, payload: { loading: false } };
 }
@@ -82,6 +96,7 @@ function getUserAsync() {
         console.dir(response);
         if (response.status === 401 || response.status === 403) {
           dispatch(userLoginRequried());
+          dispatch(startAuthFlowAsync());
         } else {
           dispatch(getUserError());
         }
@@ -116,7 +131,8 @@ function reducer(state = INITIAL_STATE, action) {
       const { loading, error } = payload;
       return { ...state, loading, error };
     }
-
+    case AUTH_FLOW:
+      return { ...state, auth: { ...state.auth, state: payload.state } };
     case GET_USER: {
       var { loading, error, user } = payload;
       console.log("GET USER", loading, error, user);

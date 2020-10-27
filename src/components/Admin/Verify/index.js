@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import client from "../customAxios";
 import { Link, Redirect } from "react-router-dom";
-import { connectUser } from "../User/context";
+import { connect } from "react-redux";
 
 export const path = "/verify";
 
@@ -57,12 +57,16 @@ function Verify(props) {
           }
         });
     }
-  }, [query]);
+  }, []);
 
   // if (error) {
   //   return <Redirect to={"."} strict={true} />;
   // } else
-  if (success || error) {
+  if (error) {
+    return <div>{error.error}</div>;
+  }
+
+  if (success) {
     window.location.href = `${window.location.origin}/#/admin`;
     return null;
   } else if (query.has("code")) {
@@ -71,5 +75,6 @@ function Verify(props) {
     return <Redirect to={"/"} />;
   }
 }
+Verify = connect(null, {})(Verify);
 Verify.path = path;
 export default Verify;

@@ -8,13 +8,13 @@ import * as consts from "./constants";
 const { REACT_APP_GITHUB_CLIENT_ID } = process.env;
 
 function Admin(props) {
-  const [authUrl, setAuthUrl] = useState(null);
   console.log("admin props", props);
 
   if (props.loading) {
     return <div>app is initializing...</div>;
-  }
-  if (props.user.error) {
+  } else if (props.user.loading) {
+    return <div>Loading user...</div>;
+  } else if (props.user.error) {
     switch (props.user.error.error) {
       case consts.LOGIN_REQUIRED_ERROR:
         return (
