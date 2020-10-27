@@ -10,11 +10,11 @@ const { REACT_APP_GITHUB_CLIENT_ID } = process.env;
 function Admin(props) {
   console.log("admin props", props);
 
-  if (props.loading) {
+  if (props.app.loading) {
     return <div>app is initializing...</div>;
-  } else if (props.user.loading) {
-    return <div>Loading user...</div>;
-  } else if (props.user.error) {
+  } else if (props.users.loading) {
+    return <div>Loading users...</div>;
+  } else if (props.users.error) {
     switch (props.user.error.error) {
       case consts.LOGIN_REQUIRED_ERROR:
         return (
@@ -42,12 +42,4 @@ function Admin(props) {
   }
 }
 
-export default connect((state) => {
-  return {
-    user: state.user,
-    loading: state.loading,
-    error: state.error,
-    auth: state.auth,
-    githubAuth: state.githubAuth,
-  };
-}, {})(Admin);
+export default connect((s) => s, {})(Admin);

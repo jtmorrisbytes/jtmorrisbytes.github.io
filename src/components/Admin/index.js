@@ -17,7 +17,7 @@ function AdminApp(props) {
   useEffect(() => {
     store.dispatch(appInitAsync());
     return store.subscribe(() => {
-      const { error } = store.getState();
+      const { error } = store.getState().app;
       setError(error);
     });
   }, []);
