@@ -53,12 +53,11 @@ api.use(function checkRequestTypeSupported(req, res, next) {
 console.log("getting controllers");
 require("fs")
   .readdirSync(path.join(__dirname, "controllers"))
-  .filter((f) => path.extname.length === 0 || path.extname(f) === ".js")
   .forEach((f) => {
     // get the controller at the specified path
     console.log("getting controller: ", f);
     let controller = require(`./controllers/${f}`);
-    console.log("controller", controller);
+    console.log("controller", f);
     // mount the above controller at the path specified
     // using the router given
     api.use(controller.path, controller.router);

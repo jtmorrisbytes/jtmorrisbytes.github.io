@@ -15,9 +15,9 @@ const {
 } = process.env;
 
 const { Octokit } = require("@octokit/rest");
-const ensureClientIdInQuery = require("../middleware/ensureClientIdInQuery");
-const ensureAccessTokenInQuery = require("../middleware/ensureAccessTokenInBody");
-const { stat } = require("fs");
+const ensureClientIdInQuery = require("../../middleware/ensureClientIdInQuery");
+const ensureAccessTokenInQuery = require("../../middleware/ensureAccessTokenInBody");
+const getAllDbUsers = require("./getAllDbUsers");
 
 const githubClient = new Octokit({
   auth: GITHUB_AUTH_TOKEN,
@@ -50,7 +50,7 @@ admin.use((req, res, next) => {
 // to my github user account
 // which requires an auth token
 
-admin.get("/user", function getInitialData(req, res) {
+admin.get("/user/github", function getInitialData(req, res) {
   const githubUser = req.app.get("admin.githubUser");
   if (githubUser == null) {
     res.sendStatus(401);
@@ -58,7 +58,7 @@ admin.get("/user", function getInitialData(req, res) {
     res.json(githubUser);
   }
 });
-
+admin.get("/users", getAllDbUsers);
 admin.post(
   "/login/verify/access_code",
 

@@ -22,6 +22,7 @@ const AUTH_FLOW = "AUTH_FLOW";
 const INITIAL_STATE = {
   loading: true,
   user: { loading: true, initialized: false, data: {}, error: null },
+  dbUser: { loading: true, initialized: false, data: {}, error: null },
   auth: { loading: true, initialized: false, loginUrl: "/admin/login" },
   githubAuth: {
     oAuthFlowStartUrl: GITHUB_OAUTH_FLOW_START,
@@ -30,16 +31,16 @@ const INITIAL_STATE = {
   },
 };
 
-function getUser(user) {
+function getGithubUser(user) {
   return {
     type: GET_USER,
     payload: { loading: false, user },
   };
 }
-function getUserPending() {
+function getGithubUserPending() {
   return { type: GET_USER, payload: { loading: true } };
 }
-function getUserError() {
+function getGithubUserError() {
   return { type: GET_USER, payload: { loading: false, error: true } };
 }
 function userUnauthorized() {
@@ -80,25 +81,25 @@ function appInitError(error) {
   return { type: APP_INIT, payload: { loading: false, error } };
 }
 
-function getUserAsync() {
+function getGithubUserAsync() {
   return (dispatch) => {
-    dispatch(getUserPending());
+    dispatch(getGithubUserPending());
     return client
-      .get("/admin/user")
+      .get("/admin/user/github")
       .then((response) => {
         console.log("GetUserAsync resolved", response);
-        dispatch(getUser(response.data));
+        dispatch(getGithubUser(response.data));
         return Promise.resolve(response.data);
       })
       .catch((e) => {
         const { request, response } = e;
-        console.log("getUserAsync rejected", response);
+        console.log("getGithubUserAsync rejected", response);
         console.dir(response);
         if (response.status === 401 || response.status === 403) {
           dispatch(userLoginRequried());
           dispatch(startAuthFlowAsync());
         } else {
-          dispatch(getUserError());
+          dispatch(getGithubUserError());
         }
         // return Promise.reject(e);
       });
@@ -110,7 +111,7 @@ export function appInitAsync() {
     console.log("Initializing application");
     dispatch(appInitPending());
     console.log("getting initial data");
-    return Promise.all([dispatch(getUserAsync())])
+    return Promise.all([dispatch(getGithubUserAsync())])
       .then((results) => {
         dispatch(appInit());
       })

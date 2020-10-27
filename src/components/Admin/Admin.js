@@ -38,7 +38,7 @@ function Admin(props) {
         return <div>Unspecified user error</div>;
     }
   } else {
-    return <div>{props.user.login}</div>;
+    return <div>{props.user.data.login}</div>;
   }
 }
 

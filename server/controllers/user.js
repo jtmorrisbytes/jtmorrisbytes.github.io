@@ -37,7 +37,7 @@ user.get("/", (req, res) => {
     .then((ghUser) => {
       return req.app
         .get("db")
-        .user.get(ghUser.login)
+        .users.get(ghUser.login)
         .then((response) => {
           if (response.length > 0) {
             let dbUser = response[0];
