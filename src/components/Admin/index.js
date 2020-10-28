@@ -11,8 +11,8 @@ import Login from "./Login";
 import GithubErrorHandler from "./Error/github";
 import AppErrorHandler from "./Error";
 import UserErrorHandler from "./Error/user";
-import Identities from "./Identities";
-import CreateIdentity from "./Identities/Identity/create";
+
+import Setup from "./Setup";
 
 const { REACT_APP_CLIENT_ID } = process.env;
 
@@ -34,11 +34,7 @@ function AdminApp(props) {
             <UserErrorHandler>
               <Loading>
                 <Route path={path} exact component={Admin} />
-                <Route path={path + "/ident/:id"} component={Identities} />
-                <Route
-                  path={path + "/createident"}
-                  component={CreateIdentity}
-                />
+                <Route path={path + "/setup"} component={Setup} />
               </Loading>
             </UserErrorHandler>
           </GithubErrorHandler>

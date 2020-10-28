@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import client from "../customAxios";
 
 import users, { initUsersAsync } from "./users";
+import user, { getDbUserAsync } from "./user";
 import github from "./github";
 
 import * as consts from "../constants";
@@ -34,12 +35,14 @@ export function initAppAsync() {
     console.log("Initializing application");
     dispatch(appInitPending());
     console.log("getting initial data");
-    return Promise.all([
-      dispatch(getGithubUserAsync()),
-      dispatch(initUsersAsync()),
-    ]).then((results) => {
-      dispatch(appInit());
-      return Promise.resolve(results);
+    return dispatch(getGithubUserAsync()).then(() => {
+      return Promise.all([
+        dispatch(getDbUserAsync(getState().github.data.login)),
+        dispatch(initUsersAsync()),
+        dispatch(appInit()),
+      ]).then((results) => {
+        return Promise.resolve(results);
+      });
     });
   };
 }
@@ -60,7 +63,7 @@ function reducer(state = INITIAL_STATE, action) {
 }
 
 const store = createStore(
-  combineReducers({ app: reducer, users, github }),
+  combineReducers({ app: reducer, users, user, github }),
   applyMiddleware(thunk)
 );
 export default store;

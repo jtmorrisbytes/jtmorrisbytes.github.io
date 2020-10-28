@@ -63,13 +63,11 @@ export function getGithubUserAsync() {
     return client
       .get("/admin/user/github")
       .then((response) => {
-        console.log("GetUserAsync resolved", response);
         dispatch(getGithubUser(response.data));
         return Promise.resolve(response.data);
       })
       .catch((e) => {
         const { request, response } = e;
-        console.log("getGithubUserAsync rejected", response);
         console.dir(response);
         if (response.status === 401 || response.status === 403) {
           dispatch(userLoginRequried());

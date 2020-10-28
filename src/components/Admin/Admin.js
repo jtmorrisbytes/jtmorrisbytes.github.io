@@ -7,17 +7,14 @@ import { initAppAsync } from "./store";
 
 import * as consts from "./constants";
 import Identities from "./Identities";
+import UserView from "./User";
 
 function Admin(props) {
   // perform app startup
   // console.log("admin props", props);
   return (
     <div>
-      <header>
-        <div className="githubName">{props.githubUser.name}</div>
-        <img src={props.githubUser.avatar_url} alt="Github User Profile" />
-      </header>
-      <Identities data={props.identities}></Identities>
+      <UserView />
     </div>
   );
 }
