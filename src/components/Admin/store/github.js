@@ -43,10 +43,7 @@ function userLoginRequried() {
     type: GET_GITHUB_USER,
     payload: {
       loading: false,
-      error: {
-        error: consts.LOGIN_REQUIRED_ERROR,
-        error_description: consts.LOGIN_REQUIRED_DESCRIPTION,
-      },
+      error: consts.LOGIN_REQUIRED_ERROR,
     },
   };
 }

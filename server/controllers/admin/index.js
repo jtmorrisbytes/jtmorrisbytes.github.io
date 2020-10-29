@@ -55,6 +55,7 @@ admin.get("/user/github", function getInitialData(req, res) {
   if (githubUser == null) {
     res.sendStatus(401);
   } else {
+    console.log("returning github user:", githubUser.access_token);
     res.json(githubUser);
   }
 });
@@ -89,7 +90,6 @@ admin.post(
       headers: { Accept: "application/json" },
     })
       .then((response) => {
-        console.log("checking if response is success", response);
         if (response?.data?.error) {
           return Promise.reject(response);
         }
@@ -125,7 +125,6 @@ admin.post(
     githubClient.users
       .getAuthenticated()
       .then((PATResponse) => {
-        console.log(PATResponse.data);
         return githubClient
           .request({
             auth: `token ${access_token}`,
@@ -138,7 +137,8 @@ admin.post(
             if (ATuser.login === PATUser.login) {
               req.app.set("admin.githubUser", {
                 ...ATuser,
-                token: { type: token_type, token: access_token },
+                token_type,
+                access_token,
               });
               res.sendStatus(200);
             } else {
@@ -147,7 +147,6 @@ admin.post(
                 description: "You are not permitted to access this resource",
               });
             }
-            console.log(ATResponse.data);
           });
       })
       .catch((e) => {

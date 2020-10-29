@@ -10,7 +10,7 @@ function GithubErrorHandler(props) {
   switch (props.error) {
     case consts.LOGIN_REQUIRED_ERROR:
       // force a redirect to the login screen
-      return <Redirect to="./login" />;
+      return <Redirect to="/admin/login" />;
     default:
       console.log("github error handler default case");
       return (
