@@ -13,7 +13,6 @@ import AppErrorHandler from "./Error";
 import UserErrorHandler from "./Error/user";
 
 import Setup from "./Setup";
-import LoginIframe from "./Login/LoginIframe";
 
 const { REACT_APP_CLIENT_ID } = process.env;
 
@@ -28,7 +27,7 @@ function AdminApp(props) {
   return (
     <div className="AdminApp">
       <Provider store={store}>
-        <Route path={path + Login.path} component={LoginIframe} />
+        <Route path={path + Login.path} component={Login} />
         <Route path={path + Verify.path} component={Verify} />
         <AppErrorHandler>
           <GithubErrorHandler>
