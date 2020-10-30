@@ -1,5 +1,7 @@
 const express = require("express");
-const { func } = require("prop-types");
+
+const session = require("express-session");
+
 const admin = express.Router();
 
 const crypto = require("crypto");
@@ -19,6 +21,8 @@ const ensureClientIdInQuery = require("../../middleware/ensureClientIdInQuery");
 const ensureAccessTokenInQuery = require("../../middleware/ensureAccessTokenInBody");
 const getAllDbUsers = require("./getAllDbUsers");
 
+const routePath = "/admin";
+
 const githubClient = new Octokit({
   auth: GITHUB_AUTH_TOKEN,
   userAgent: "jtmorrisbytes-admin-panel",
@@ -34,6 +38,19 @@ if (GITHUB_AUTH_TOKEN == null) {
     "process.env.GITHUB_AUTH_TOKEN must be provided to use this module"
   );
 }
+
+admin.use(
+  session({
+    secret: crypto.randomBytes(64).toString("hex"),
+    path: routePath,
+    saveUninitialized: false,
+    resave: false,
+  })
+);
+admin.use((req, res, next) => {
+  console.log("checking req.session", req.session);
+  next();
+});
 
 // check ADMIN_CLIENT_ID against request params
 // if no match, client is unauthorized
@@ -51,12 +68,10 @@ admin.use((req, res, next) => {
 // which requires an auth token
 
 admin.get("/user/github", function getInitialData(req, res) {
-  const githubUser = req.app.get("admin.githubUser");
-  if (githubUser == null) {
+  if (req.session.user == null) {
     res.sendStatus(401);
   } else {
-    console.log("returning github user:", githubUser.access_token);
-    res.json(githubUser);
+    res.json(req.session.user);
   }
 });
 admin.get("/users", getAllDbUsers);
@@ -90,12 +105,39 @@ admin.post(
       headers: { Accept: "application/json" },
     })
       .then((response) => {
+        const { access_token, token_type, scope } = response.data;
         if (response?.data?.error) {
           return Promise.reject(response);
         }
-        console.log("SUCCESS");
-        console.log(response.data);
-        res.json(response.data);
+        // verify the tokens match
+        return githubClient.users.getAuthenticated().then((PATResponse) => {
+          console.log("got PAT user");
+          return githubClient
+            .request({
+              auth: `token ${access_token}`,
+              method: "GET",
+              url: "/user",
+            })
+            .then((ATResponse) => {
+              console.log("Got AT user");
+              let PATUser = PATResponse.data,
+                ATuser = ATResponse.data;
+              if (ATuser.login === PATUser.login) {
+                console.log("Logins match. continuing");
+                req.session.user = {
+                  ...ATuser,
+                  access_token,
+                };
+
+                res.status(200).json({ access_token });
+              } else {
+                res.status(403).json({
+                  error: "E_LOGIN_MISMATCH",
+                  description: "You are not permitted to access this resource",
+                });
+              }
+            });
+        });
       })
       .catch((e) => {
         let data = e?.response?.data || e?.data;
@@ -135,11 +177,10 @@ admin.post(
             let PATUser = PATResponse.data,
               ATuser = ATResponse.data;
             if (ATuser.login === PATUser.login) {
-              req.app.set("admin.githubUser", {
+              req.session.user = {
                 ...ATuser,
-                token_type,
                 access_token,
-              });
+              };
               res.sendStatus(200);
             } else {
               res.status(403).json({
@@ -194,4 +235,4 @@ admin.get("/github/project/:name", function getGithubProjectById(req, res) {
     });
 });
 
-module.exports = { path: "/admin", router: admin };
+module.exports = { path: routePath, router: admin };

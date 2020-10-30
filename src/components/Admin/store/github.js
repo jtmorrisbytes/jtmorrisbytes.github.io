@@ -54,13 +54,22 @@ function getGithubUserPending() {
 function getGithubUserError() {
   return { type: GET_GITHUB_USER, payload: { loading: false, error: true } };
 }
-export function getGithubUserAsync() {
-  return (dispatch) => {
+export function getGithubUserAsync(token) {
+  return (dispatch, getState) => {
     dispatch(getGithubUserPending());
     return client
-      .get("/admin/user/github")
+      .get("/admin/user/github", {
+        headers: {
+          Authorization: `Bearer ${getState().github.token || token}`,
+        },
+      })
       .then((response) => {
-        dispatch(getGithubUser(response.data));
+        dispatch(
+          getGithubUser({
+            ...response.data,
+            access_token: response.data.access_token || token,
+          })
+        );
         return Promise.resolve(response.data);
       })
       .catch((e) => {
@@ -76,12 +85,14 @@ export function getGithubUserAsync() {
   };
 }
 function authFlowStart(state) {
-  return { type: AUTH_FLOW, payload: { state: state || "" }, loading: false };
+  return { type: AUTH_FLOW, payload: { state, loading: false } };
 }
 export function startAuthFlowAsync() {
   return (dispatch) => {
     return client.get(AUTH_LOGIN_URL).then((response) => {
+      console.log("StartAuthFlowAsync responded with", response.data);
       dispatch(authFlowStart(response?.data?.state));
+      return Promise.resolve(response.data);
     });
   };
 }
@@ -95,6 +106,7 @@ function github(state = INITIAL_STATE, action) {
       return { ...state, data: user || {}, loading, error };
     }
     case AUTH_FLOW:
+      console.log("AUTH_FLOW: reducer setting payload state:", payload.state);
       return { ...state, state: payload.state };
     default:
       return state;
