@@ -13,12 +13,7 @@ function GithubErrorHandler(props) {
       return <Redirect to="/admin/login" />;
     default:
       console.log("github error handler default case");
-      return (
-        <>
-          {props.children.length}
-          {props.children}
-        </>
-      );
+      return <>{props.children}</>;
   }
 }
 

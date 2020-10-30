@@ -14,7 +14,7 @@ function updateInput(updaterFn) {
 export const path = "/setup";
 export function Setup(props) {
   console.log("Setup props", props);
-  const [githubPAT, setGithubPAT] = useState("");
+  const [githubPAT, setGithubPAT] = useState(props.user.access_token);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -71,7 +71,7 @@ export function Setup(props) {
           <label htmlFor="github_pat">Github PAT</label>
           <input
             id="github_pat"
-            type="password"
+            type="text"
             autoComplete="current-password"
             name="github_pat"
             required
@@ -152,6 +152,8 @@ export function Setup(props) {
   );
 }
 
-Setup = connect((s) => s, {})(Setup);
+Setup = connect((s) => {
+  return { user: s.github.data };
+}, {})(Setup);
 Setup.path = path;
 export default Setup;
