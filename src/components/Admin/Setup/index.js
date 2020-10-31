@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
 import { Octokit } from "@octokit/rest";
+import user from "../Error/user";
+import client from "../customAxios";
 
 function updateInput(updaterFn) {
   return (event) => {
@@ -9,146 +11,127 @@ function updateInput(updaterFn) {
   };
 }
 
-// NOTE PAT === Personal Access Token
+const githubProfileEditUrl = "https://github.com/settings/profile";
 
 export const path = "/setup";
 export function Setup(props) {
   console.log("Setup props", props);
-  const [githubPAT, setGithubPAT] = useState(props.user.access_token);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [youtubeChannelHash, setYoutubeChannelHash] = useState("");
   const [linkedinUsername, setLinkedInUsername] = useState("");
   // refresh profile info based on PAT
-  useEffect(() => {
-    // the magic number is the length
-    // of a personal access token according to
-    // https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html
-    if (githubPAT?.length >= 20) {
-      // create client based on PAT
-      const octo = new Octokit({ auth: githubPAT });
-      // try to get the user based on the token
-      octo.users
-        .getAuthenticated()
-        .then((response) => {
-          // this operation may not throw on a response.status >= 200
-          // because of github's method of returning errors in the body
-          // it is neccessary to check the response status in the body
-          if (response?.data.status && response?.data.status !== 200) {
-            console.warn(
-              "error while getting data from supplied PAT",
-              response.data
-            );
-          } else {
-            console.log(
-              "get authenticated user from githubPAT success",
-              response.data
-            );
-            let user = response.data;
-            setUsername(user.login);
-            setEmail(user.email);
-            let [firstName, lastName] = user.name.split(" ");
-            setFirstName(firstName);
-            setLastName(lastName);
-          }
-        })
-        .catch((error) => {
-          console.error("error getting user from PAT", error);
-          if (error.status === 401) {
-            alert("Personal Access Token is expired or invalid");
-          }
-          console.dir(error);
-        });
-    }
-  }, [githubPAT]);
   return (
-    <form>
-      <div className="formgroup">
-        <h3>Configuration Data</h3>
-        <div className="inputgroup">
-          <label htmlFor="github_pat">Github PAT</label>
-          <input
-            id="github_pat"
-            type="text"
-            autoComplete="current-password"
-            name="github_pat"
-            required
-            value={githubPAT}
-            onChange={(e) => {
-              setGithubPAT(e.target.value);
-            }}
-          />
+    <div className="Setup">
+      <h1>User Profile</h1>
+      {/* profile image */}
+      <img src={props.user.avatar_url} />
+      {/* name */}
+      <div className="name">{props.user.name}</div>
+      {/* handle/username */}
+      <div className="username">{props.user.login}</div>
+      {/* email address */}
+      <div className="email">{props.user.email}</div>
+      {/* phone number */}
+      <label for="phone">Phone Number </label>
+      <input
+        type="tel"
+        autoComplete="cc-mobile"
+        placeholder="Phone Number"
+        defaultValue={props.user.phone_number}
+      />
+      <br />
+      {/* general location (city, state) */}
+      <label for="location">Location</label>
+      {props.user.location ? (
+        <div className={"location"}>{props.user.location}</div>
+      ) : (
+        <div className={"nolocation"}>
+          No Location provided. to add one, Please do so on{" "}
+          <a href={githubProfileEditUrl}>github.com</a>
         </div>
-        <div className="inputgroup">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={username}
-            disabled
-            placeholder={"username"}
-            // hidden
-          />
-        </div>
-      </div>
+      )}
+      {/* bio */}
+      <label for="bio">Biography</label>
+      {props.user.bio ? (
+        <p className="bio">{props.user.bio}</p>
+      ) : (
+        <p className="nobio">
+          No bio provided. To create a bio, Please do so on&nbsp;
+          <a href={githubProfileEditUrl}>github.com</a>
+        </p>
+      )}
+      {/* resume link */}
+      <label for="resume">Resume Url </label>
+      <input
+        className="resume"
+        type="url"
+        placeholder="https://docs.google.com/"
+      />
+      {/* profiles */}
+      <h2>Social Media Links</h2>
+      {/* youtube */}
+      <label for="youtube">Youtube Channel</label>
+      <input
+        id="youtube"
+        type="url"
+        name="youtube"
+        placeholder="https://www.youtube.com/channel/XXXXX"
+      />
+      <br />
+      {/* linkedin */}
+      <label for="linkedIn">LinkedIn</label>
+      <input
+        id="linkedIn"
+        type="url"
+        name="linkedin"
+        placeholder="https://linkedin.com/in/username"
+      />
+      {/* twitter ? */}
+      {/* facebook */}
+      <button
+        onclick={(e) => {
+          client
+            .get(`/admin/user/${props.user.login}`)
+            .then((response) => {
+              // response succeded user exists
 
-      <div className="formgroup">
-        <h3>Personal Info</h3>
-
-        <h4>Name</h4>
-        <input
-          type="text"
-          name="first"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <br />
-        <input type="text" name="last" value={lastName} />
-
-        <div className="inputgroup">
-          <label>Phone</label>
-          <input type="tel" name="phone" />
-        </div>
-        <div className="inputgroup">
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" name="email" value={email} />
-        </div>
-      </div>
-
-      {/* profile links */}
-      <div className="formgroup">
-        <h3>Profile links</h3>
-        <label htmlFor="github_username">https://www.github.com/</label>
-        <input
-          id="github_username"
-          type="text"
-          name="github_username"
-          placeholder="Github profile URL"
-          defaultValue={username}
-        />
-        <div className="inputgroup">
-          <label>https://www.youtube.com/</label>
-          <input
-            type="text"
-            name="youtube_channel"
-            required
-            value={youtubeChannelHash}
-          ></input>
-        </div>
-        <div className="inputgroup">
-          <label>https://linkedin.com/in/</label>
-          <input
-            type="text"
-            name="linkedin_username"
-            required
-            value={linkedinUsername}
-          />
-        </div>
-      </div>
-    </form>
+              client.patch(`/admin/user/${props.user.login}`, {
+                ...response.data,
+                ...props.user,
+                phone,
+                linkedin_username: linkedinUsername,
+                youtube_channel_hash: youtubeChannelHash,
+              });
+            })
+            .catch((error) => {
+              if (error.response.status === 404) {
+                // user not found or endpoint not found
+                console.log("user not found, creating");
+                client
+                  .post("/admin/user", {
+                    ...props.user,
+                    phone,
+                    linkedin_username: linkedinUsername,
+                    youtube_channel_hash: youtubeChannelHash,
+                  })
+                  .then((response) => {
+                    if (
+                      response.status === 200 ||
+                      response.status === 201 ||
+                      response.status === 203
+                    ) {
+                      console.log("create user successful");
+                    }
+                  });
+              } else {
+                console.error("Error checking if user exists: ", error);
+              }
+            });
+        }}
+      >
+        Create Profile
+      </button>
+    </div>
   );
 }
 
