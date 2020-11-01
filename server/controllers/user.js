@@ -73,7 +73,20 @@ user.use((req, res, next) => {
 });
 
 user.get("/", (req, res) => {
-  res.json(req.user);
+  let u = req.user;
+  res.json({
+    login: u.login,
+    id: u.id,
+    avatar_url: u.avatar_url,
+    html_url: u.html_url,
+    name: u.name,
+    company: u.company,
+    blog: u.blog,
+    email: u.email,
+    location: u.location,
+    followers: u.followers,
+    twitter_username: u.twitter_username,
+  });
 });
 
 module.exports = {
