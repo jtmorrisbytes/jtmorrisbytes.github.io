@@ -1,79 +1,79 @@
-const express = require("express");
+// the user endpoint
+const user = require("express").Router();
 
-const { GITHUB_AUTH_TOKEN } = process.env;
+const redis = require("../lib/redis");
+const { P_SETEX } = require("../lib/redis");
+// 60 seconds times 30 minutes
+const USER_CACHE_SECONDS = 60 * 30;
 
-if (GITHUB_AUTH_TOKEN === null) {
-  throw new TypeError(
-    "process.env.GITHUB_AUTH_TOKEN must be provided to use this module"
-  );
+function checkUserLock() {
+  return new Promise((resolve, reject) => {
+    // console.log("getting user lock state");
+    redis.P_GET("user.lock").then((reply) => {
+      // console.log("got reply from redis", reply);
+      if (reply == "false" || reply == null) {
+        // console.log("user is not locked");
+        resolve();
+      } else {
+        // wait for the lock to be released
+        console.log("using polling to wait for the lock to be cleared");
+        let intervalId = setInterval(() => {
+          console.log("Polling user.lock");
+          redis.GET("user.lock", (err, reply) => {
+            if (err) {
+              console.log("polling error", err);
+              reject(err);
+            } else {
+              console.log("polling reply", reply, typeof reply);
+              if (reply == null || reply == "false") {
+                clearInterval(intervalId);
+                resolve();
+              }
+            }
+          });
+        }, 1000);
+      }
+    });
+  });
 }
 
-const { Octokit } = require("@octokit/rest");
-
-const githubClient = new Octokit({ auth: GITHUB_AUTH_TOKEN });
-
-const user = express.Router();
-// get the user data based on the github profile
-user.get("/", (req, res) => {
-  // the user data is based on github.
-  // fetch the github user first
-
-  return new Promise((resolve, reject) => {
-    let user = req.app.get("githubUser");
-    // TODO: Check age of user Data
-    console.warn("TODO: implement expiry and refetch of github user data");
-    if (user == null /* OR IF DATA IS TOO OLD */) {
-      githubClient.users
-        .getAuthenticated()
-        .then((response) => {
-          req.app.set("githubUser", response.data);
-          resolve(response.data);
-        })
-        .catch(reject);
-    } else {
-      resolve(user);
-    }
-  })
-    .then((ghUser) => {
-      return req.app
-        .get("db")
-        .users.get(ghUser.login)
-        .then((response) => {
-          if (response.length > 0) {
-            let dbUser = response[0];
-            const { html_url, url, login, name, email, homepage } = ghUser;
-            const { linkedin_profile_url, youtube_channel_url } = dbUser;
-            return Promise.resolve({
-              username: login,
-              name,
-              email,
-              homepage,
-              github: { url, html_url },
-              linkedIn: { html_url: linkedin_profile_url },
-              youtube: { html_url: youtube_channel_url },
-            });
+user.use((req, res, next) => {
+  // check that another instance is writing
+  // console.log("user preflight");
+  checkUserLock().then(() => {
+    redis.P_GET("user").then((reply) => {
+      if (reply) {
+        req.user = JSON.parse(reply);
+        next();
+      } else {
+        return req.octoClient.users.getAuthenticated().then((r) => {
+          if (r.data?.status > 399) {
+            return Promise.reject(r.data);
           } else {
-            return Promise.reject({
-              message: "Server is not in a valid state to perform this request",
-              reason: "User has not been setup yet",
-              code: "E_RUN_USER_SETUP",
-              status: 503,
+            // numerical value is in seconds
+            console.log("taking the lock for user");
+            return redis.P_SETEX("user.lock", 120, "true").then(() => {
+              console.log("lock successful, updating user cache");
+              return redis
+                .P_SETEX("user", USER_CACHE_SECONDS, JSON.stringify(r.data))
+                .then(() => {
+                  console.log("cache update success. clearing lock");
+                  return redis.P_SETEX("user.lock", 120, "false").then(() => {
+                    console.log("clear lock success. calling next handler");
+                    req.user = JSON.parse(r.data);
+                    next();
+                  });
+                });
             });
           }
         });
-    })
-    .then((resolvedUser) => {
-      // user data has been settled and aggregated at this point
-      res.status(200);
-      if (req.accepts("application/json")) {
-        res.status(200).json(resolvedUser);
-      } else if (req.accepts("text/plain")) {
-        res.send(resolvedUser);
       }
-    })
-    .catch((error) => {
-      res.status(error.status || 500).json(error);
     });
+  });
+});
+
+user.get("/", (req, res) => {
+  res.json(req.user);
 });
 
 module.exports = {

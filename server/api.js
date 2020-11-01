@@ -1,12 +1,14 @@
 // this is the api server module
 const express = require("express");
 const path = require("path");
+const octoclient = require("./lib/octoclient");
 
 const api = express.Router();
 const mountPath = "/api";
 
 // setup json parser
 api.use(express.json());
+api.use(octoclient());
 
 /*
   register a preflight request check to ensure the client
