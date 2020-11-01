@@ -13,8 +13,7 @@ import "./App.css";
 import Banner from "./components/Banner";
 
 import apiClient from "./lib/apiClient";
-import AdminApp from "./components/Admin/";
-import Login from "./components/Admin/Login";
+import UserContext from "./lib/userContext";
 
 function App() {
   // grab user info on launch
@@ -23,7 +22,9 @@ function App() {
     // get the aggregated user data from the api server
     apiClient
       .get("/user")
-      .then(() => {})
+      .then((response) => {
+        setUserView(response.data);
+      })
       .catch((e) => {
         console.error("getUser failed in App", e);
       });
@@ -31,19 +32,13 @@ function App() {
 
   return (
     <div className="App">
-      <HashRouter>
-        <Switch>
-          {/* display admin panel */}
-          <Route path="/admin" component={AdminApp} />
-          <Route path="/login" component={Login} />
-          <Route>
-            <Nav />
-            <Banner />
-            <Projects />
-            <Contact />
-          </Route>
-        </Switch>
-      </HashRouter>
+      {/* display admin panel */}
+      <UserContext>
+        <Nav user={user} />
+        <Banner user={user} />
+        <Projects user={user} />
+        <Contact user={user} />
+      </UserContext>
     </div>
   );
 }
