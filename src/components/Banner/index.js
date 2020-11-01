@@ -9,29 +9,49 @@ import { connect } from "../../lib/userContext";
 
 const Banner = (props) => {
   return (
-    <Card id="Banner">
+    <>
       <a id="to-about"></a>
-      <div id="about-container">
-        <h1 id="name">{props.user.name}</h1>
-        {/* add padding after the name */}
-        {/* <div className="subheading"> */}
-        <h2 id="job-scope">Full Stack</h2>
-        <h3 id="job-title">Web Developer</h3>
-        {/* </div> */}
-        <div id="profile-links">
-          <a id="github-profile" href={props.user.html_url}>
-            {/* attempt to use a image set */}
-            <img id="github-logo" src={GithubMark} alt="github-logo" />
-          </a>
+      <Card id="Banner">
+        <img className="avatar" src={props.user.avatar_url} />
+        <div className="info">
+          <h1 className="name">{props.user.name}</h1>
+          {/* add padding after the name */}
+          {/* <div className="subheading"> */}
+
+          <h2 className="job-title">Full Stack Web Developer</h2>
           <a
-            id="linkedin-profile"
-            href={`https://www.linkedin.com/in/${props.user.login}/`}
+            className="email"
+            target="_blank"
+            href={`mailto:${props.user.email}?subject=portfolio`}
           >
-            <img id="linkedin-logo" src={LinkedInLogo} alt="Linked In" />
+            {props.user.email}
           </a>
+          <br />
+          <a className="phone" href={`tel:4697764432`}>
+            4697764432
+          </a>
+          <div className="links">
+            {/* </div> */}
+            <a
+              className="github-link"
+              href={props.user.html_url}
+              target="_blank"
+            >
+              {/* attempt to use a image set */}
+              <img id="github-logo" src={GithubMark} alt="github-logo" />
+            </a>
+            <a
+              className="linkedin-link"
+              href={`https://www.linkedin.com/in/${props.user.login}/`}
+              target="_blank"
+            >
+              <img id="linkedin-logo" src={LinkedInLogo} alt="Linked In" />
+            </a>
+          </div>
         </div>
-      </div>
-    </Card>
+        {props.bio ? <p className="bio">{props.bio}</p> : null}
+      </Card>
+    </>
   );
 };
 export default connect(Banner);
