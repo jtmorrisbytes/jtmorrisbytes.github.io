@@ -21,17 +21,11 @@ connection.on("error", console.error);
 process.on("beforeExit", async () => {
   await connection.disconnect();
 });
-module.exports = function octoClient() {
-  const octoClient = new Octokit({
-    auth: GITHUB_AUTH_TOKEN,
+module.exports = new Octokit({
+  auth: GITHUB_AUTH_TOKEN,
 
-    onRateLimit: () => true,
-    onAbuseLimit: () => false,
-    connection,
-    id: "jtmorrisbytes-portfolio",
-  });
-  return (req, res, next) => {
-    req.octoClient = octoClient;
-    next();
-  };
-};
+  onRateLimit: () => true,
+  onAbuseLimit: () => false,
+  connection,
+  id: "jtmorrisbytes-portfolio",
+});

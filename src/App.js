@@ -3,7 +3,7 @@ import About from "./components/Banner";
 import Nav from "./components/Nav";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
-import Projects from "./components/Projects";
+import Projects from "./components/Projects/functional";
 
 // import Routes from "./routes";
 

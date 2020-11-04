@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:8080",
   "dependencies": {
+    "@octokit/graphql": "^4.5.7",
     "@octokit/plugin-throttling": "^3.3.2",
     "@octokit/rest": "^18.0.6",
     "@types/prop-types": "^15.7.1",
@@ -14,6 +15,8 @@
     "apollo-link-http": "^1.5.16",
     "axios": "^0.19.0",
     "bottleneck": "^2.19.5",
+    "cheerio": "^1.0.0-rc.3",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
