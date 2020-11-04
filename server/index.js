@@ -10,8 +10,6 @@ const { SERVER_HOST, SERVER_PORT, DATABASE_URL, NODE_ENV } = process.env;
 const ROOT = path.join(__dirname, "..");
 const HTML_ROOT = path.join(ROOT, "build");
 
-let AppDocument = String(fs.readFileSync(path.join(HTML_ROOT, "index.html")));
-
 server.set("fsroot", ROOT);
 server.set("htmlRoot", HTML_ROOT);
 
@@ -23,7 +21,7 @@ server.use(api.path, api.router);
 if (NODE_ENV === "production") {
   // serve static in production
   server.use(express.static(HTML_ROOT));
-  server.get("/", (req, res) => {
+  server.get("*", (req, res) => {
     // console.log("is user authenticated",req.isAuthenticated() || "NO")
     res.send(AppDocument);
   });

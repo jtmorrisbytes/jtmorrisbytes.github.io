@@ -40,8 +40,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -b master -d build",
     "startDev": "react-app-rewired start",
-    "start": "node ./server/index.js",
-    "build": "react-app-rewired build",
+    "start": "npm run build && node ./server/index.js",
+    "build": "npx react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
