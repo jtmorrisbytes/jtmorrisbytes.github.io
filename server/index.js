@@ -5,7 +5,14 @@ const path = require("path");
 const fs = require("fs");
 const server = express();
 
-const { SERVER_HOST, SERVER_PORT, DATABASE_URL, NODE_ENV } = process.env;
+const {
+  SERVER_HOST,
+  SERVER_PORT,
+  HOST,
+  PORT,
+  DATABASE_URL,
+  NODE_ENV,
+} = process.env;
 
 const ROOT = path.join(__dirname, "..");
 const HTML_ROOT = path.join(ROOT, "build");
@@ -35,7 +42,7 @@ massive({
 }).then((db) => {
   // create a reference to the database instance inside server
   server.set("db", db);
-  server.listen(SERVER_PORT, SERVER_HOST, () => {
+  server.listen(SERVER_PORT || PORT, SERVER_HOST || HOST, () => {
     console.log(`listenting on ${SERVER_HOST}:${SERVER_PORT}`);
   });
 });
