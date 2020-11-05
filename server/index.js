@@ -42,7 +42,7 @@ massive({
 }).then((db) => {
   // create a reference to the database instance inside server
   server.set("db", db);
-  server.listen(SERVER_PORT || PORT, SERVER_HOST || HOST, () => {
+  server.listen(SERVER_PORT || PORT, SERVER_HOST || HOST || "0.0.0.0", () => {
     console.log(`listenting on ${SERVER_HOST}:${SERVER_PORT}`);
   });
 });
