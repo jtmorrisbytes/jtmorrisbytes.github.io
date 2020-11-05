@@ -31,7 +31,7 @@ if (NODE_ENV === "production") {
 const massive = require("massive");
 massive({
   connectionString: DATABASE_URL,
-  ssl: { rejectUnauthorized: NODE_ENV === "production" },
+  ssl: { rejectUnauthorized: false },
 }).then((db) => {
   // create a reference to the database instance inside server
   server.set("db", db);
